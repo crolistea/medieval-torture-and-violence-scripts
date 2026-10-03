@@ -55,6 +55,13 @@
   --on-accent: #000000;
 }
 
+/* Very Very Hostile Brutality Engine: hot industrial orange. */
+[data-theme='orange'] {
+  --accent: #e86414;
+  --accent-bright: #ff944d;
+  --on-accent: #160900;
+}
+
 :root {
   transition:
     --accent var(--dur-theme) ease,

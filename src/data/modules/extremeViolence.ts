@@ -7,7 +7,7 @@ const script = createScriptSource('dynamic_escalation_engine.js', raw)
 const name = 'Very Very Hostile Brutality Engine'
 
 export const extremeViolence: ModuleDefinition = {
-  slug: 'very-very-extreme-violence',
+  slug: 'very-very-hostile-brutality',
   name,
   theme: 'blood',
   tagline:

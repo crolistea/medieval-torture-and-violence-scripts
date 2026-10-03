@@ -8,6 +8,7 @@
  * changing character personality or forcing violence.
  */
 context.character = context.character || {};
+context.chat = context.chat || {};
 context.character.scenario = context.character.scenario || "";
 
 const CONFIG = { DEBUG:false, HISTORY_DEPTH:5, MAX_ACTIONS:4, MAX_TOKENS:150, RECENT_PENALTY:6 };
@@ -46,16 +47,18 @@ const ACTIONS = [
 ];
 
 const TRIGGERS=["fight","fighting","violent","violence","attack","threat","intimidat","angry","rage","grab","restrain","subdue","captive","prisoner","brawl","struggle","hit","punch","choke","domin"];
-function msg(m){return ((m&&m.message)?m.message:String(m||"")).toLowerCase();}
+function msg(m){if(!m)return "";if(typeof m==="string")return m.toLowerCase();if(typeof m.message==="string")return m.message.toLowerCase();if(typeof m.content==="string")return m.content.toLowerCase();return "";}
 function any(t,a){return a.some(x=>t.includes(x));}
 function tok(t){return Math.ceil(t.length/4);}
 function budget(fallback){
   const m=String(context.character.scenario||"").match(/\[CONTEXT BUDGET:[^\]]*per_script=(\d+)/i);
   return m?Math.min(fallback,Math.max(80,parseInt(m[1],10))):fallback;
 }
-const ms=context.chat.last_messages||[];
-const recent=ms.slice(Math.max(0,ms.length-CONFIG.HISTORY_DEPTH)).map(msg).join(" ");
-const latest=String(context.chat.last_message||"").toLowerCase();
+const ms=Array.isArray(context.chat.last_messages)?context.chat.last_messages:[];
+const latest=msg(context.chat.last_message);
+const recentParts=ms.slice(Math.max(0,ms.length-CONFIG.HISTORY_DEPTH)).map(msg).filter(Boolean);
+if(latest&&recentParts.length&&recentParts[0]===latest)recentParts.shift();
+const recent=recentParts.join(" ");
 const combined=(recent+" "+latest).toLowerCase();
 let intensity=0;
 for(const tier of INTENSITY){if(any(combined,tier.terms)){intensity=tier.level;break;}}
@@ -72,15 +75,17 @@ if(any(latest,TRIGGERS)||any(recent,TRIGGERS)){
   }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,CONFIG.MAX_ACTIONS);
 
   const ACTIVE_MAX_TOKENS=budget(CONFIG.MAX_TOKENS);
-  let out="\n[ACTION VARIETY] This supplements {{char}}'s existing personality and intent; never create aggression that the scene/character did not already support. Avoid repetitive dominance clichés. When confrontation is already appropriate, vary body positioning, grappling, movement, restraint, environment use, and intensity. Keep action cinematic and non-instructional.\n";
-  let used=tok(out), emitted=[];
+  const header="\n[ACTION VARIETY] Preserve {{char}}'s motives and current scene. When confrontation already exists, vary physical beats instead of repeating clichés. Keep action cinematic and non-instructional.\n";
+  const repetitionLine=repeated.length?"Recent repetitive beat families detected ("+repeated.map(r=>r.label).join(", ")+"); prefer a materially different beat unless continuity requires repetition.\n":"";
+  const footer="Intensity="+intensity+"/4. Match established stakes, abilities and continuity; never escalate merely for novelty.\n";
+  let out=header;
+  let used=tok(header)+tok(repetitionLine)+tok(footer), emitted=[];
   for(const x of ranked){
     const line="- "+x.a.text+"\n";
     if(used+tok(line)>ACTIVE_MAX_TOKENS)break;
     out+=line; used+=tok(line); emitted.push(x.a.id);
   }
-  if(repeated.length) out+="Recent repetitive beat families detected ("+repeated.map(r=>r.label).join(", ")+"); prefer a materially different beat unless continuity requires repetition.\n";
-  out+="Current inferred confrontation intensity="+intensity+"/4. Match force to the established character, stakes, relationship, abilities, and scene continuity; never raise intensity merely for novelty.\n";
-  context.character.scenario+=out;
+  out+=repetitionLine+footer;
+  if(tok(out)<=ACTIVE_MAX_TOKENS)context.character.scenario+=out;
   if(CONFIG.DEBUG)console.log("[Action Variety] intensity="+intensity+" tokens~"+tok(out)+" actions="+emitted.join(","));
 }

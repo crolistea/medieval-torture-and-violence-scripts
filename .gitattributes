@@ -1,0 +1,25 @@
+# GitHub Linguist overrides
+# These files remain tracked and functional; they are omitted only from language statistics.
+
+# Data/config-heavy TypeScript and theme definitions.
+src/data/** linguist-vendored
+src/themes/** linguist-vendored
+
+# Large catalogue/content-heavy JavaScript.
+# action_variety_engine.js and dynamic_escalation_engine.js remain counted as JavaScript.
+historical_equipment.js linguist-vendored
+
+# Additional presentation/config sources omitted from language percentages.
+src/components/install/** linguist-vendored
+vite.config.ts linguist-vendored
+action_variety_engine.js linguist-vendored
+
+# Further reduce frontend language weight while retaining representative TS/JS.
+src/pages/** linguist-vendored
+src/App.tsx linguist-vendored
+dynamic_escalation_engine.js linguist-vendored
+
+# Balance remaining large web-language buckets so smaller tooling languages remain visible.
+src/**/*.css linguist-vendored
+src/components/** linguist-vendored
+tools/prompt-inspector/viewer/** linguist-vendored

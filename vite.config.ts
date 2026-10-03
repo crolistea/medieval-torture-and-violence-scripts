@@ -3,7 +3,7 @@ import { defineConfig, type Plugin } from 'vite'
 
 // GitHub Project Pages serves this site from /<repository-name>/, so every
 // asset URL has to start with that path. Change this if the repository is renamed.
-const REPOSITORY_BASE = '/medieval-shit-and-violence-script/'
+const REPOSITORY_BASE = '/medieval-torture-and-violence-scripts/'
 
 // The Pages workflow passes the real base path reported by GitHub
 // (actions/configure-pages), which keeps the build correct after a rename
