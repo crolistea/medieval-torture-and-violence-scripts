@@ -1,3 +1,7 @@
-
-# Module metadata/configuration is data-like; keep application TS counted.
+# GitHub Linguist: keep the language graph focused on implementation rather than
+# bulky content/config sources. These files remain tracked and work normally.
 src/data/** linguist-vendored
+
+# The historical equipment catalogue is intentionally data-heavy JavaScript.
+# Keep the smaller executable JanitorAI engines counted as JavaScript.
+historical_equipment.js linguist-vendored
