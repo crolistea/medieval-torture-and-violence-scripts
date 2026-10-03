@@ -52,3 +52,24 @@ Only use an upstream you trust. Requests may contain character cards, chat histo
 - Streaming responses are relayed but the tool does not provide a special streaming UI.
 
 These limitations are intentionally documented so they can become normal GitHub issues and contributions.
+
+
+## Optional Rust redaction
+
+Build the bundled redactor:
+
+```sh
+cd tools/prompt-inspector/redactor
+cargo build --release
+```
+
+Then start Prompt Inspector with it:
+
+```sh
+cd ..
+go run . -redactor ./redactor/target/release/prompt-redactor
+```
+
+The Go server pipes displayed prompt text through the Rust helper before printing it. Redaction affects terminal display only; forwarding still uses the original request body so enabling the helper does not silently alter provider requests.
+
+The current Rust rules are intentionally small and should be expanded before treating the output as safe to publish.
