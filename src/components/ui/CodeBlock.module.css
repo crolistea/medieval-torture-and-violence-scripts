@@ -50,8 +50,9 @@
   flex: none;
 }
 
+/* A short preview. The reader only needs the copy button, not the code. */
 .pre {
-  max-height: min(52vh, 420px);
+  max-height: 240px;
   padding: 16px;
   overflow: auto;
   font-size: 0.8125rem;
@@ -68,28 +69,6 @@
   outline-offset: -2px;
 }
 
-.foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 24px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--line);
-  font-size: 0.8125rem;
-  color: var(--text-dim);
-}
-
-.foot a {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.external {
-  font-size: 0.9em;
-}
-
 /* Phones: the copy button gets its own full-width row. */
 @media (max-width: 639px) {
   .bar {
@@ -104,7 +83,7 @@
   }
 
   .pre {
-    max-height: 260px;
+    max-height: 180px;
     padding: 14px;
     font-size: 0.75rem;
   }

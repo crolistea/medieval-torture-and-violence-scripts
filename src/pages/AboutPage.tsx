@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 import { RichText } from '../components/ui/RichText'
 import { sources } from '../data/janitor'
 import { modules } from '../data/modules'
+import { actionVariety } from '../data/modules/actionVariety'
+import { historicalEquipment } from '../data/modules/historicalEquipment'
 import { site } from '../data/site'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { Link } from '../router/Link'
@@ -18,10 +20,10 @@ const PIPELINE = [
 ]
 
 const REPOSITORY_FILES = [
-  { path: 'README.md', note: 'Overview of the Historical Equipment module.' },
+  { path: 'README.md', note: `Overview of ${historicalEquipment.name}.` },
   { path: 'docs/DESIGN.md', note: 'How scoring, detail levels and the token budget work.' },
-  { path: 'docs/ACTION_VARIETY.md', note: 'Design notes and safeguards for Action Variety.' },
-  { path: 'tests/test-scenarios.md', note: 'Behaviour checks for Historical Equipment.' },
+  { path: 'docs/ACTION_VARIETY.md', note: `Design notes and safeguards for ${actionVariety.name}.` },
+  { path: 'tests/test-scenarios.md', note: `Behaviour checks for ${historicalEquipment.name}.` },
   { path: 'tests/combined-modules.md', note: 'Checks for running both modules together.' },
 ]
 
@@ -158,9 +160,8 @@ export function AboutPage() {
           ))}
         </ul>
         <p>
-          Three details could not be confirmed and are marked Unconfirmed in the steps: the exact label of the
-          Advanced script type, the layout of the Advanced code editor, and whether a script can be attached to
-          a character you did not create.
+          Three details could not be confirmed: the exact label of the Advanced script type, the layout of the
+          Advanced code editor, and whether a script can be attached to a character you did not create.
         </p>
         <p>
           {site.platform} can change its interface at any time. If a step no longer matches what you see,{' '}
@@ -180,7 +181,9 @@ export function AboutPage() {
           ))}
         </ul>
         <p>
-          <RichText text="The repository also holds `violence_engine.js` (v0.1.0), a separate script with the same purpose as Action Variety. Install one or the other, not both, or a confrontation will receive two sets of suggestions." />
+          <RichText
+            text={`The repository also holds \`violence_engine.js\` (v0.1.0), a separate script with the same purpose as ${actionVariety.name}. Install one or the other, not both, or a confrontation will receive two sets of suggestions.`}
+          />
         </p>
       </Section>
     </div>

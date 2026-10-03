@@ -8,31 +8,29 @@ import { AboutPage } from './pages/AboutPage'
 import { HomePage } from './pages/HomePage'
 import { ModulePage } from './pages/ModulePage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { useHashRoute } from './router/hashRouter'
+import { useHashPath } from './router/hashRouter'
 import { moduleSlugFromPath, paths } from './router/paths'
 import { DEFAULT_THEME } from './themes/themes'
 
 export default function App() {
-  const { pathname, search } = useHashRoute()
+  const pathname = useHashPath()
   const mainRef = useRef<HTMLElement>(null)
   const previousPath = useRef(pathname)
 
   const moduleSlug = moduleSlugFromPath(pathname)
   const activeModule = moduleSlug ? findModule(moduleSlug) : undefined
-  const stepParam = search.get('step')
 
   // A module page takes the module's accent. Everything else uses the home blue.
   const theme = activeModule?.theme ?? DEFAULT_THEME
   useTheme(theme)
 
   // On a page change, start at the top and move focus into the new page.
-  // A link to a specific install step is left alone: the installer scrolls to itself.
   useEffect(() => {
     if (previousPath.current === pathname) return
     previousPath.current = pathname
-    if (stepParam === null) window.scrollTo(0, 0)
+    window.scrollTo(0, 0)
     mainRef.current?.focus({ preventScroll: true })
-  }, [pathname, stepParam])
+  }, [pathname])
 
   const skipToContent = (event: MouseEvent<HTMLAnchorElement>) => {
     // The hash holds the route, so a normal "#main" link would navigate away.
@@ -43,7 +41,7 @@ export default function App() {
   let page
   if (pathname === paths.home) page = <HomePage />
   else if (pathname === paths.about) page = <AboutPage />
-  else if (activeModule) page = <ModulePage module={activeModule} stepParam={stepParam} />
+  else if (activeModule) page = <ModulePage module={activeModule} />
   else page = <NotFoundPage />
 
   return (

@@ -3,7 +3,7 @@
  * A module picks one of these and the whole site shifts to it while
  * that module is open.
  */
-export const THEME_IDS = ['blue', 'verdigris', 'signal'] as const
+export const THEME_IDS = ['blue', 'aqua', 'blood'] as const
 
 export type ThemeId = (typeof THEME_IDS)[number]
 

@@ -37,18 +37,18 @@
   --on-accent: #ffffff;
 }
 
-/* Historical Equipment: verdigris, the patina of old copper and bronze. */
-[data-theme='verdigris'] {
-  --accent: #3fae9c;
-  --accent-bright: #66cdbb;
-  --on-accent: #03120f;
+/* Medieval Torture Devices: aqua. */
+[data-theme='aqua'] {
+  --accent: #1cc4d2;
+  --accent-bright: #5fe0ea;
+  --on-accent: #021316;
 }
 
-/* Action Variety: signal orange. */
-[data-theme='signal'] {
-  --accent: #f0591e;
-  --accent-bright: #ff8552;
-  --on-accent: #170700;
+/* Violence and Shit: blood red. The bright value keeps red text readable on black. */
+[data-theme='blood'] {
+  --accent: #c1121f;
+  --accent-bright: #f2464d;
+  --on-accent: #ffffff;
 }
 
 :root {

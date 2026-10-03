@@ -4,16 +4,12 @@
 }
 
 .inner {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 32px 48px;
-  padding-block: 40px 56px;
-}
-
-.about {
-  display: grid;
-  gap: 10px;
-  align-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 48px;
+  padding-block: 32px 44px;
 }
 
 .name {
@@ -23,16 +19,9 @@
   text-transform: uppercase;
 }
 
-.note {
-  max-width: 44ch;
-  font-size: 0.875rem;
-  color: var(--text-dim);
-}
-
 .links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
   gap: 8px 28px;
   margin: 0;
 }
@@ -52,13 +41,13 @@
 
 @media (max-width: 767px) {
   .inner {
-    grid-template-columns: minmax(0, 1fr);
-    padding-block: 32px 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 28px 36px;
   }
 
   .links {
     flex-direction: column;
-    justify-content: flex-start;
     gap: 4px;
   }
 

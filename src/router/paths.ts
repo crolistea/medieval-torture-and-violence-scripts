@@ -3,8 +3,6 @@ export const paths = {
   home: '/',
   about: '/about',
   module: (slug: string) => `/modules/${slug}`,
-  /** `step` is 1-based. Pass "done" for the completion screen. */
-  moduleStep: (slug: string, step: number | 'done') => `/modules/${slug}?step=${step}`,
 } as const
 
 const MODULE_PREFIX = '/modules/'

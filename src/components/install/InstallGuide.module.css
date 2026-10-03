@@ -1,0 +1,107 @@
+.guide {
+  --number-size: 52px;
+  --number-gap: 28px;
+  --step-gap: clamp(44px, 6vw, 72px);
+
+  max-width: 920px;
+}
+
+.steps {
+  display: grid;
+  gap: var(--step-gap);
+  margin: 0;
+}
+
+.step {
+  position: relative;
+}
+
+/* A rule that runs from one number down to the next. */
+.step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: var(--number-size);
+  bottom: calc(var(--step-gap) * -1);
+  left: calc(var(--number-size) / 2);
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: var(--number-size) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--number-gap);
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  width: var(--number-size);
+  height: var(--number-size);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.title {
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.25rem);
+  font-weight: 740;
+  font-stretch: 86%;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+.content {
+  margin-top: 20px;
+  margin-left: calc(var(--number-size) + var(--number-gap));
+}
+
+/* The end of the guide. */
+
+.complete {
+  display: grid;
+  gap: 14px;
+  margin-top: var(--step-gap);
+  color: var(--text-muted);
+}
+
+.complete p {
+  max-width: 64ch;
+}
+
+.banner {
+  margin-bottom: 6px;
+  padding: clamp(22px, 4vw, 36px);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: clamp(2rem, 5.4vw, 3.75rem);
+  font-weight: 820;
+  font-stretch: 76%;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* Phones: the content takes the full width under the number and title. */
+@media (max-width: 639px) {
+  .guide {
+    --number-size: 40px;
+    --number-gap: 14px;
+  }
+
+  .step:not(:last-child)::before {
+    content: none;
+  }
+
+  .number {
+    font-size: 1.0625rem;
+  }
+
+  .content {
+    margin-top: 16px;
+    margin-left: 0;
+  }
+}

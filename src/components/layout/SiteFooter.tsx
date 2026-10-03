@@ -9,13 +9,7 @@ export function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <div className={cx('container', styles.inner)}>
-        <div className={styles.about}>
-          <p className={styles.name}>{site.name}</p>
-          <p className={styles.note}>
-            Scripts for the {site.platform} Scripts feature, with guided installation. An unofficial community
-            project, not affiliated with or endorsed by {site.platform}.
-          </p>
-        </div>
+        <p className={styles.name}>{site.name}</p>
 
         <nav aria-label="Footer">
           <ul role="list" className={styles.links}>

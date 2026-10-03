@@ -5,7 +5,7 @@ import { ArrowRightIcon } from '../ui/icons'
 import styles from './ModuleDoors.module.css'
 
 /**
- * The main action on the home page: one large panel per module.
+ * The module list on the home page: one large panel per module.
  * Each panel is scoped to its module's theme, so hovering it previews the
  * colour of the section the reader is about to enter.
  */
@@ -19,23 +19,14 @@ export function ModuleDoors() {
             {module.kind}
           </p>
 
-          <h3 className={styles.name}>
+          <h2 className={styles.name}>
             {/* The link's hit area is stretched over the whole panel in CSS. */}
             <Link to={paths.module(module.slug)} className={styles.link}>
               {module.name}
             </Link>
-          </h3>
+          </h2>
 
           <p className={styles.tagline}>{module.tagline}</p>
-
-          <dl className={styles.facts}>
-            {module.cardFacts.map((fact) => (
-              <div key={fact.label} className={styles.fact}>
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
 
           <p className={styles.cta} aria-hidden="true">
             Open installer

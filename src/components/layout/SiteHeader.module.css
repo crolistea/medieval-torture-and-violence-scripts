@@ -43,13 +43,6 @@
   white-space: nowrap;
 }
 
-.mark {
-  align-self: center;
-  width: 12px;
-  height: 12px;
-  background: var(--accent);
-}
-
 .brandName {
   font-size: 1rem;
   font-weight: 760;

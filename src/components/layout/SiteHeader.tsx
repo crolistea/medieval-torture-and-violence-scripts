@@ -21,7 +21,7 @@ export function SiteHeader({ pathname, theme }: SiteHeaderProps) {
   // Module links come from the registry, so a new module appears here by itself.
   const items = [
     { to: paths.home, label: 'Home' },
-    ...modules.map((module) => ({ to: paths.module(module.slug), label: module.navLabel })),
+    ...modules.map((module) => ({ to: paths.module(module.slug), label: module.name })),
     { to: paths.about, label: 'About' },
   ]
 
@@ -43,7 +43,6 @@ export function SiteHeader({ pathname, theme }: SiteHeaderProps) {
 
       <div className={cx('container', styles.inner)}>
         <Link to={paths.home} className={styles.brand} onClick={closeMenu}>
-          <span className={styles.mark} aria-hidden="true" />
           <span className={styles.brandName}>{site.name}</span>
           <span className={styles.brandFor}>for {site.platform}</span>
         </Link>
