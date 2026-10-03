@@ -1,0 +1,132 @@
+/* Wide screens: a vertical rail that stays in view next to the step. */
+
+.nav {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+}
+
+.list {
+  display: grid;
+  margin: 0;
+}
+
+.item {
+  position: relative;
+}
+
+/* Connector between one square and the next. */
+.item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 46px;
+  bottom: -10px;
+  left: 17px;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.link {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  color: var(--text-dim);
+  transition: color var(--dur-fast) ease;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background-color var(--dur) ease,
+    border-color var(--dur) ease,
+    color var(--dur) ease;
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.link:hover {
+  color: var(--text);
+}
+
+.link:hover .box {
+  border-color: var(--accent-bright);
+}
+
+.done {
+  color: var(--text-muted);
+}
+
+.done .box {
+  border-color: var(--accent-bright);
+  color: var(--accent-bright);
+}
+
+.link[aria-current='step'] {
+  color: var(--text);
+}
+
+.link[aria-current='step'] .title {
+  font-weight: 650;
+}
+
+.link[aria-current='step'] .box {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Small screens: a row of squares pinned under the header. */
+
+@media (max-width: 1023px) {
+  .nav {
+    top: var(--header-h);
+    z-index: var(--z-stepper);
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 10px var(--gutter);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  .list {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .item:not(:last-child)::after {
+    content: none;
+  }
+
+  .link {
+    display: block;
+    padding: 0;
+  }
+
+  .box {
+    width: 100%;
+    height: 44px;
+  }
+
+  .title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

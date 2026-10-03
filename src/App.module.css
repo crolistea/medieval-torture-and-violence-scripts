@@ -1,0 +1,47 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.main {
+  flex: 1;
+  animation: page-in 420ms var(--ease-out);
+}
+
+/* Focus is moved here on navigation for screen readers; no ring is needed. */
+.main:focus {
+  outline: none;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: calc(var(--z-header) + 1);
+  padding: 12px 18px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 650;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}

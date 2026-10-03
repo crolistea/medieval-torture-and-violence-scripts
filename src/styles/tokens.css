@@ -1,0 +1,48 @@
+/*
+ * Design tokens.
+ * One dark theme, square corners everywhere, one accent at a time.
+ * Accent values live in src/themes/themes.css.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces: cool near-black, never pure #000. */
+  --bg: #07090c;
+  --surface: #0b0e13;
+  --surface-raised: #11151c;
+  --line: #1c222b;
+  --line-strong: #353f4d;
+
+  /* Text: cool neutrals. Each passes WCAG AA on --bg. */
+  --text: #e8ecf2;
+  --text-muted: #9ea9b8;
+  --text-dim: #7b8696;
+
+  /* Type */
+  --font-sans: 'Archivo Variable', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Layout */
+  --container: 1240px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --header-h: 64px;
+  --section-gap: clamp(64px, 9vw, 128px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur: 260ms;
+  --dur-theme: 520ms;
+
+  /* Layers. Keep every z-index in the project on this scale. */
+  --z-stepper: 20;
+  --z-header: 40;
+  --z-grain: 60;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --header-h: 56px;
+  }
+}

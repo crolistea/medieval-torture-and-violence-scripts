@@ -1,0 +1,135 @@
+.blocks {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.text {
+  max-width: 68ch;
+  color: var(--text-muted);
+}
+
+/* Numbered actions */
+
+.actions {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.action {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 16px;
+  counter-increment: action;
+}
+
+.action::before {
+  content: counter(action);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent-bright);
+}
+
+.actionBody {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 68ch;
+  padding-top: 3px;
+}
+
+/* Expected result */
+
+.expect {
+  display: grid;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg));
+}
+
+.expectTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
+
+.expectTitle {
+  font-weight: 650;
+}
+
+.expectLines {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0 0;
+}
+
+.expectLines li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  font-size: 0.9375rem;
+}
+
+.expectLines svg {
+  margin-top: 5px;
+  color: var(--accent-bright);
+}
+
+/* Optional detail */
+
+.details {
+  border: 1px solid var(--line);
+}
+
+.details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  padding: 0 18px;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+  transition: color var(--dur-fast) ease;
+}
+
+.details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.details > summary::after {
+  content: '+';
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--accent-bright);
+}
+
+.details[open] > summary::after {
+  content: '\2212';
+}
+
+.details > summary:hover {
+  color: var(--accent-bright);
+}
+
+.details > summary:focus-visible {
+  outline-offset: -2px;
+}
+
+.detailsBody {
+  padding: 4px 18px 18px;
+}

@@ -1,0 +1,234 @@
+/* Hero: headline, one sentence, then the module chooser in the first screen. */
+
+.hero {
+  padding-top: clamp(36px, 6vw, 80px);
+}
+
+.eyebrow {
+  margin-bottom: 18px;
+  color: var(--accent-bright);
+}
+
+.title {
+  max-width: 11em;
+  font-size: clamp(2.5rem, 5.6vw + 0.6rem, 5.25rem);
+  font-weight: 780;
+  font-stretch: 78%;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+}
+
+.lead {
+  max-width: 48ch;
+  margin-top: 22px;
+  font-size: clamp(1.0625rem, 0.5vw + 1rem, 1.25rem);
+  color: var(--text-muted);
+}
+
+.chooser {
+  margin-top: clamp(32px, 4.5vw, 56px);
+}
+
+/* Shared section rhythm */
+
+.section {
+  margin-top: var(--section-gap);
+}
+
+.heading {
+  max-width: 16em;
+  font-size: clamp(1.75rem, 2.6vw + 1rem, 3rem);
+  font-weight: 760;
+  font-stretch: 82%;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.sub {
+  max-width: 56ch;
+  margin-top: 16px;
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+}
+
+/* "What a script does": a timeline. One rule across the top, numbers sitting on it. */
+
+.sequence {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 32px;
+  margin: 48px 0 0;
+  border-top: 2px solid var(--line-strong);
+}
+
+.beat {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-top: 0;
+}
+
+.beatNumber {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-top: -19px;
+  margin-bottom: 14px;
+  border: 1px solid var(--accent);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-bright);
+}
+
+.beatTitle {
+  font-size: 1.1875rem;
+  font-weight: 680;
+  font-stretch: 92%;
+  line-height: 1.2;
+}
+
+.beatBody {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+/* "The card stays in charge": statement left, terms right. */
+
+.promise {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 40px clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.promiseList {
+  display: grid;
+  margin: 0;
+}
+
+.promiseRow {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 8px 32px;
+  padding-block: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.promiseRow dt {
+  font-size: 1.0625rem;
+  font-weight: 680;
+  font-stretch: 94%;
+  line-height: 1.3;
+}
+
+.promiseRow dd {
+  color: var(--text-muted);
+}
+
+/* Closing band */
+
+.start {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  gap: 32px clamp(32px, 5vw, 80px);
+  align-items: center;
+  padding: clamp(28px, 4vw, 56px);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+
+.startLinks {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+}
+
+.startLinks li + li {
+  border-top: 1px solid var(--line-strong);
+}
+
+.startLink {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 68px;
+  padding: 0 22px;
+  background: var(--bg);
+  font-size: 1.1875rem;
+  font-weight: 680;
+  font-stretch: 90%;
+  transition:
+    background-color var(--dur) ease,
+    color var(--dur-fast) ease;
+}
+
+.startSwatch {
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+}
+
+.startLink svg {
+  color: var(--text-dim);
+  transition:
+    transform var(--dur) var(--ease-out),
+    color var(--dur-fast) ease;
+}
+
+.startLink:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  color: var(--accent-bright);
+}
+
+.startLink:hover svg {
+  color: var(--accent-bright);
+  transform: translateX(6px);
+}
+
+.startLink:focus-visible {
+  outline-offset: -4px;
+}
+
+/* Tablet */
+
+@media (max-width: 1023px) {
+  .sequence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+    border-top: 0;
+  }
+
+  .beat {
+    border-top: 2px solid var(--line-strong);
+  }
+
+  .promise,
+  .start {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phone */
+
+@media (max-width: 639px) {
+  .sequence {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    margin-top: 40px;
+  }
+
+  .promiseRow {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 18px;
+  }
+
+  .startLink {
+    min-height: 64px;
+    padding: 0 16px;
+    font-size: 1.0625rem;
+  }
+}

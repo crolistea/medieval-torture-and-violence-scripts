@@ -1,0 +1,111 @@
+.block {
+  /* min-width: 0 lets the block shrink inside grid and flex parents. */
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 12px 12px 16px;
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--surface-raised);
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.fileIcon {
+  font-size: 1.5rem;
+  color: var(--accent-bright);
+}
+
+.fileText {
+  display: grid;
+  min-width: 0;
+}
+
+.filename {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.bar .copy {
+  flex: none;
+}
+
+.pre {
+  max-height: min(52vh, 420px);
+  padding: 16px;
+  overflow: auto;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  white-space: pre;
+  tab-size: 2;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.pre:focus-visible {
+  outline-offset: -2px;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.external {
+  font-size: 0.9em;
+}
+
+/* Phones: the copy button gets its own full-width row. */
+@media (max-width: 639px) {
+  .bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .bar .copy {
+    width: 100%;
+    min-height: 56px;
+  }
+
+  .pre {
+    max-height: 260px;
+    padding: 14px;
+    font-size: 0.75rem;
+  }
+}

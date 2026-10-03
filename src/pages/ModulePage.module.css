@@ -1,0 +1,217 @@
+/* Module header: name and pitch on the left, a ruled fact sheet on the right. */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 40px clamp(40px, 6vw, 96px);
+  align-items: end;
+  padding-top: clamp(36px, 6vw, 80px);
+}
+
+.kind {
+  margin-bottom: 18px;
+  color: var(--accent-bright);
+}
+
+.title {
+  font-size: clamp(2.5rem, 5.2vw + 0.6rem, 5rem);
+  font-weight: 780;
+  font-stretch: 78%;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+}
+
+.alias {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+
+.lead {
+  max-width: 46ch;
+  margin-top: 22px;
+  font-size: clamp(1.0625rem, 0.5vw + 1rem, 1.25rem);
+  color: var(--text-muted);
+}
+
+.actions {
+  margin-top: 32px;
+}
+
+.startButton:hover svg {
+  transform: translateY(4px);
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+  border-top: 2px solid var(--accent);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 16px;
+  align-items: baseline;
+  padding-block: 11px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fact dt {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.fact dd {
+  font-size: 0.9375rem;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+/* What it does */
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: 40px clamp(40px, 6vw, 96px);
+  align-items: start;
+  margin-top: var(--section-gap);
+}
+
+.heading {
+  font-size: clamp(1.75rem, 2.4vw + 1rem, 2.75rem);
+  font-weight: 760;
+  font-stretch: 84%;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  margin-top: 16px;
+  color: var(--text-muted);
+}
+
+.lists {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line-strong);
+  background: var(--line-strong);
+}
+
+.listBlock {
+  padding: clamp(20px, 2.6vw, 32px);
+  background: var(--bg);
+}
+
+.listBlock:first-child {
+  background: color-mix(in srgb, var(--accent) 7%, var(--bg));
+}
+
+.listTitle {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  font-stretch: 90%;
+}
+
+.list {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
+}
+
+.list li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.list svg {
+  margin-top: 4px;
+}
+
+.yes {
+  color: var(--accent-bright);
+}
+
+.no {
+  color: var(--text-dim);
+}
+
+/* Requirements: one ruled row. */
+
+.needs {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: 16px clamp(40px, 6vw, 96px);
+  align-items: baseline;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.needsTitle {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  font-stretch: 90%;
+}
+
+.needsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.needsList li {
+  padding-right: 20px;
+}
+
+.needsList li + li {
+  padding-left: 20px;
+  border-left: 1px solid var(--line-strong);
+}
+
+.installer {
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+@media (max-width: 1023px) {
+  .hero,
+  .about,
+  .needs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero {
+    align-items: start;
+  }
+}
+
+@media (max-width: 639px) {
+  .lists {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .needsList {
+    display: grid;
+    gap: 0;
+  }
+
+  .needsList li,
+  .needsList li + li {
+    padding: 10px 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .fact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}

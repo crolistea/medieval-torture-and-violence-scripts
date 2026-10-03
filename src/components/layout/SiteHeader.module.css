@@ -1,0 +1,236 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+/* Accent edge along the top. It redraws from the left whenever the theme changes. */
+.sweep {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: sweep 640ms var(--ease-out);
+}
+
+@keyframes sweep {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: var(--header-h);
+}
+
+/* Brand */
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+.mark {
+  align-self: center;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+}
+
+.brandName {
+  font-size: 1rem;
+  font-weight: 760;
+  font-stretch: 88%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.brandFor {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* Desktop navigation */
+
+.navList {
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--header-h);
+  padding: 0 14px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color var(--dur-fast) ease;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  inset: auto 14px -1px;
+  height: 2px;
+  background: var(--accent-bright);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.navLink:hover {
+  color: var(--text);
+}
+
+.navLink[aria-current='page'] {
+  color: var(--text);
+}
+
+.navLink[aria-current='page']::after,
+.navLink:hover::after {
+  transform: scaleX(1);
+}
+
+.navLink:focus-visible {
+  outline-offset: -4px;
+}
+
+.repo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+}
+
+.repo:hover {
+  border-color: var(--accent-bright);
+  color: var(--accent-bright);
+}
+
+.repoArrow {
+  font-size: 0.85em;
+  color: var(--text-dim);
+}
+
+/* Small-screen menu */
+
+.menuButton {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  border: 1px solid var(--line-strong);
+  font-size: 1.25rem;
+  transition: border-color var(--dur-fast) ease;
+}
+
+.menuButton:hover,
+.menuButton[aria-expanded='true'] {
+  border-color: var(--accent-bright);
+}
+
+.menu {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .nav,
+  .repo {
+    display: none;
+  }
+
+  .menuButton {
+    display: grid;
+    margin-right: 0;
+  }
+
+  .menu {
+    position: absolute;
+    inset: 100% 0 auto;
+    display: block;
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--bg);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity var(--dur) ease,
+      transform var(--dur) var(--ease-out),
+      visibility 0s linear var(--dur);
+  }
+
+  .menu[data-open='true'] {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .menuList {
+    margin: 0;
+    padding-block: 8px 16px;
+  }
+
+  .menuList li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  .menuLink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-stretch: 92%;
+    color: var(--text-muted);
+  }
+
+  .menuLink[aria-current='page'] {
+    color: var(--accent-bright);
+  }
+
+  .menuLink[aria-current='page']::before {
+    content: '';
+    order: 1;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+  }
+}
+
+@media (max-width: 420px) {
+  .brandFor {
+    display: none;
+  }
+}

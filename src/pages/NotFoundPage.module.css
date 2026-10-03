@@ -1,0 +1,40 @@
+.page {
+  display: grid;
+  justify-items: start;
+  gap: 18px;
+  padding-top: clamp(48px, 8vw, 112px);
+}
+
+.code {
+  color: var(--accent-bright);
+}
+
+.title {
+  max-width: 12em;
+  font-size: clamp(2.25rem, 4.6vw + 0.6rem, 4.5rem);
+  font-weight: 780;
+  font-stretch: 78%;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+.lead {
+  max-width: 48ch;
+  font-size: 1.125rem;
+  color: var(--text-muted);
+}
+
+.links {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.home {
+  margin-top: 12px;
+}
+
+.home:hover svg {
+  transform: translateX(4px);
+}

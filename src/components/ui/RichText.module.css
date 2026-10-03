@@ -1,0 +1,20 @@
+/* A button or menu name the reader has to find in JanitorAI. */
+.label {
+  padding: 1px 7px 2px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 0.9em;
+  font-weight: 650;
+  white-space: nowrap;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.code {
+  padding: 1px 5px 2px;
+  background: var(--surface-raised);
+  color: var(--accent-bright);
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+}

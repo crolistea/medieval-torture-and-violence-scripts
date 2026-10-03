@@ -1,0 +1,154 @@
+/*
+ * Panels share 1px rules: the list background is the rule colour and each
+ * panel paints over it. This keeps the lines clean for any number of modules.
+ */
+.doors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: 1px;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--line-strong);
+}
+
+.door {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto auto;
+  gap: 16px;
+  padding: clamp(24px, 3.4vw, 44px);
+  background: var(--bg);
+  transition: background-color var(--dur) ease;
+}
+
+/* Accent bar that draws across the top edge on hover and focus. */
+.door::before {
+  content: '';
+  position: absolute;
+  inset: -1px -1px auto;
+  height: 4px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms var(--ease-out);
+}
+
+.door:hover,
+.door:focus-within {
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg));
+}
+
+.door:hover::before,
+.door:focus-within::before {
+  transform: scaleX(1);
+}
+
+.kind {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+}
+
+.name {
+  font-size: clamp(1.875rem, 2.6vw + 1rem, 3rem);
+  font-weight: 760;
+  font-stretch: 82%;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: -5px;
+}
+
+.tagline {
+  max-width: 44ch;
+  color: var(--text-muted);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.fact {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.fact dt {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.fact dd {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-weight: 650;
+  transition: color var(--dur-fast) ease;
+}
+
+.cta svg {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.door:hover .cta,
+.door:focus-within .cta {
+  color: var(--accent-bright);
+}
+
+.door:hover .cta svg,
+.door:focus-within .cta svg {
+  transform: translateX(6px);
+}
+
+@media (max-width: 479px) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .fact {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+  }
+}

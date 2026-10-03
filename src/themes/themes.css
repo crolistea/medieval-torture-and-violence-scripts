@@ -1,0 +1,65 @@
+/*
+ * Section themes.
+ *
+ * Each theme sets three values:
+ *   --accent         fill colour for primary buttons and bars
+ *   --accent-bright  accent used as text or thin lines on the dark background
+ *   --on-accent      text colour that sits on top of --accent
+ *
+ * The accents are registered as real colours so the browser can animate them.
+ * That is what makes the whole page shift colour when you enter a module.
+ * To add a theme: add a block here and an entry in themes.ts.
+ */
+
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2457e6;
+}
+
+@property --accent-bright {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #6f96ff;
+}
+
+@property --on-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+/* Home and general pages: strong blue. */
+:root,
+[data-theme='blue'] {
+  --accent: #2457e6;
+  --accent-bright: #6f96ff;
+  --on-accent: #ffffff;
+}
+
+/* Historical Equipment: verdigris, the patina of old copper and bronze. */
+[data-theme='verdigris'] {
+  --accent: #3fae9c;
+  --accent-bright: #66cdbb;
+  --on-accent: #03120f;
+}
+
+/* Action Variety: signal orange. */
+[data-theme='signal'] {
+  --accent: #f0591e;
+  --accent-bright: #ff8552;
+  --on-accent: #170700;
+}
+
+:root {
+  transition:
+    --accent var(--dur-theme) ease,
+    --accent-bright var(--dur-theme) ease,
+    --on-accent var(--dur-theme) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}

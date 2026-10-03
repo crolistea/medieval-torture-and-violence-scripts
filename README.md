@@ -58,6 +58,22 @@ The script starts with `"use worker";`, guards writable context fields, reads `c
 - `tests/test-scenarios.md` — behavioral test matrix.
 - `docs/DESIGN.md` — selection/token architecture and tuning notes.
 
+## Website
+
+A guided installation site for the modules lives in `src/` (React, TypeScript, Vite). Pushing to `main` builds and deploys it to GitHub Pages through `.github/workflows/pages.yml`:
+
+<https://sawyer100.github.io/medieval-shit-and-violence-script/>
+
+```sh
+npm install
+npm run dev      # local preview with live reload
+npm run build    # TypeScript checks, then a production build in dist/
+```
+
+The site loads `historical_equipment.js` and `action_variety_engine.js` directly from the repository root, so the code a visitor copies is always the file in this repository. Edit the scripts here, never inside `src/`.
+
+To add a module: put the script in the repository root, copy one of the files in `src/data/modules/`, edit its text, and add it to the list in `src/data/modules/index.ts`. The navigation, home page, and installer are generated from that list. The JanitorAI button and menu names used by the install steps are kept in one place, `src/data/janitor.ts`.
+
 ## Safety / scope
 
 Catalogue descriptions are identification, provenance, visual/narrative context, and selection metadata. They intentionally avoid operational instructions for injuring a real person.
