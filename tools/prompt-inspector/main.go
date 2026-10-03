@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -26,6 +27,7 @@ type chatMessage struct {
 func main() {
 	addr := flag.String("addr", "127.0.0.1:8080", "local listen address")
 	upstream := flag.String("upstream", "", "optional OpenAI-compatible upstream base URL")
+	redactor := flag.String("redactor", "", "optional path to the prompt-redactor executable")
 	flag.Parse()
 
 	client := &http.Client{Timeout: 90 * time.Second}
@@ -42,7 +44,7 @@ func main() {
 			return
 		}
 
-		printRequest(body)
+		printRequest(body, *redactor)
 
 		if strings.TrimSpace(*upstream) == "" {
 			w.Header().Set("Content-Type", "application/json")
@@ -105,11 +107,25 @@ func copyHeaders(dst, src http.Header) {
 	}
 }
 
-func printRequest(body []byte) {
+func redactText(input, redactorPath string) string {
+	if strings.TrimSpace(redactorPath) == "" {
+		return input
+	}
+	cmd := exec.Command(redactorPath)
+	cmd.Stdin = strings.NewReader(input)
+	out, err := cmd.Output()
+	if err != nil {
+		log.Printf("redactor failed; showing original text: %v", err)
+		return input
+	}
+	return strings.TrimSpace(string(out))
+}
+
+func printRequest(body []byte, redactorPath string) {
 	var req chatRequest
 	if err := json.Unmarshal(body, &req); err != nil {
 		log.Printf("captured non-standard JSON body (%d bytes)", len(body))
-		fmt.Println(string(body))
+		fmt.Println(redactText(string(body), redactorPath))
 		return
 	}
 
@@ -119,10 +135,10 @@ func printRequest(body []byte) {
 		fmt.Printf("\n[%02d] %s\n", i, strings.ToUpper(msg.Role))
 		switch value := msg.Content.(type) {
 		case string:
-			fmt.Println(value)
+			fmt.Println(redactText(value, redactorPath))
 		default:
 			pretty, _ := json.MarshalIndent(value, "", "  ")
-			fmt.Println(string(pretty))
+			fmt.Println(redactText(string(pretty), redactorPath))
 		}
 	}
 	fmt.Printf("\n=== END REQUEST ===\n")
