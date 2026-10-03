@@ -131,8 +131,9 @@ function getSignals() {
   const latest = messageText(context.chat.last_message);
   const start = Math.max(0, messages.length - CONFIG.HISTORY_DEPTH);
   const parts = messages.slice(start).map(messageText).filter(Boolean);
-  // JanitorAI may already include last_message in last_messages. Keep one copy only.
-  if (latest && parts.length && parts[parts.length - 1] === latest) parts.pop();
+  // JanitorAI exposes last_messages newest first, and may also expose the
+  // newest turn separately as last_message. Remove one duplicate newest copy.
+  if (latest && parts.length && parts[0] === latest) parts.shift();
   return {recent: parts.join(" "), latest};
 }
 
