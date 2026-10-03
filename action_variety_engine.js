@@ -75,9 +75,9 @@ if(any(latest,TRIGGERS)||any(recent,TRIGGERS)){
   }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,CONFIG.MAX_ACTIONS);
 
   const ACTIVE_MAX_TOKENS=budget(CONFIG.MAX_TOKENS);
-  const header="\n[ACTION VARIETY] This supplements {{char}}'s existing personality and intent; never create aggression that the scene/character did not already support. Avoid repetitive dominance clichés. When confrontation is already appropriate, vary body positioning, grappling, movement, restraint, environment use, and intensity. Keep action cinematic and non-instructional.\n";
+  const header="\n[ACTION VARIETY] Preserve {{char}}'s motives and current scene. When confrontation already exists, vary physical beats instead of repeating clichés. Keep action cinematic and non-instructional.\n";
   const repetitionLine=repeated.length?"Recent repetitive beat families detected ("+repeated.map(r=>r.label).join(", ")+"); prefer a materially different beat unless continuity requires repetition.\n":"";
-  const footer="Current inferred confrontation intensity="+intensity+"/4. Match force to the established character, stakes, relationship, abilities, and scene continuity; never raise intensity merely for novelty.\n";
+  const footer="Intensity="+intensity+"/4. Match established stakes, abilities and continuity; never escalate merely for novelty.\n";
   let out=header;
   let used=tok(header)+tok(repetitionLine)+tok(footer), emitted=[];
   for(const x of ranked){
