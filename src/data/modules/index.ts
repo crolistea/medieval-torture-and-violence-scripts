@@ -1,7 +1,10 @@
 import type { ModuleDefinition } from '../types'
 import { actionVariety } from './actionVariety'
+import { bloodloss } from './bloodloss'
 import { extremeViolence } from './extremeViolence'
 import { historicalEquipment } from './historicalEquipment'
+import { noCleanFights } from './noCleanFights'
+import { stopSmirking } from './stopSmirking'
 
 /*
  * The module registry. The home page, navigation, routes and documentation
@@ -17,6 +20,9 @@ export const modules: ModuleDefinition[] = [
   historicalEquipment,
   actionVariety,
   extremeViolence,
+  stopSmirking,
+  noCleanFights,
+  bloodloss,
 ]
 
 export function findModule(slug: string): ModuleDefinition | undefined {
