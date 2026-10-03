@@ -18,3 +18,8 @@ action_variety_engine.js linguist-vendored
 src/pages/** linguist-vendored
 src/App.tsx linguist-vendored
 dynamic_escalation_engine.js linguist-vendored
+
+# Balance remaining large web-language buckets so smaller tooling languages remain visible.
+src/**/*.css linguist-vendored
+src/components/** linguist-vendored
+tools/prompt-inspector/viewer/** linguist-vendored
