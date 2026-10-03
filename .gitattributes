@@ -1,7 +1,10 @@
-# GitHub Linguist: keep the language graph focused on implementation rather than
-# bulky content/config sources. These files remain tracked and work normally.
-src/data/** linguist-vendored
+# GitHub Linguist overrides
+# These files remain tracked and functional; they are omitted only from language statistics.
 
-# The historical equipment catalogue is intentionally data-heavy JavaScript.
-# Keep the smaller executable JanitorAI engines counted as JavaScript.
+# Data/config-heavy TypeScript and theme definitions.
+src/data/** linguist-vendored
+src/themes/** linguist-vendored
+
+# Large catalogue/content-heavy JavaScript.
+# action_variety_engine.js and dynamic_escalation_engine.js remain counted as JavaScript.
 historical_equipment.js linguist-vendored
