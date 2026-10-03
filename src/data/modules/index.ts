@@ -1,5 +1,6 @@
 import type { ModuleDefinition } from '../types'
 import { actionVariety } from './actionVariety'
+import { extremeViolence } from './extremeViolence'
 import { historicalEquipment } from './historicalEquipment'
 
 /*
@@ -12,7 +13,11 @@ import { historicalEquipment } from './historicalEquipment'
  *   3. Add it to the array below.
  *   4. Optional: give it its own accent in src/themes/themes.css and themes.ts.
  */
-export const modules: ModuleDefinition[] = [historicalEquipment, actionVariety]
+export const modules: ModuleDefinition[] = [
+  historicalEquipment,
+  actionVariety,
+  extremeViolence,
+]
 
 export function findModule(slug: string): ModuleDefinition | undefined {
   return modules.find((module) => module.slug === slug)
