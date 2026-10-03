@@ -13,3 +13,8 @@ historical_equipment.js linguist-vendored
 src/components/install/** linguist-vendored
 vite.config.ts linguist-vendored
 action_variety_engine.js linguist-vendored
+
+# Further reduce frontend language weight while retaining representative TS/JS.
+src/pages/** linguist-vendored
+src/App.tsx linguist-vendored
+dynamic_escalation_engine.js linguist-vendored
