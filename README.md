@@ -1,4 +1,6 @@
-# Universal Historical Equipment Module for JanitorAI
+# Catalogue: [View Scripts](https://sawyer100.github.io/medieval-torture-and-violence-scripts/)
+
+## Universal Historical Equipment Module for JanitorAI
 
 A reusable, character-agnostic JanitorAI Script providing context-sensitive knowledge of historical, penal, reconstructed, and famous disputed/legendary punishment and torture equipment.
 
