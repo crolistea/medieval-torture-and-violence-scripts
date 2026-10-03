@@ -12,6 +12,7 @@
  */
 
 context.character = context.character || {};
+context.chat = context.chat || {};
 context.character.personality = context.character.personality || "";
 context.character.scenario = context.character.scenario || "";
 context.character.example_dialogs = context.character.example_dialogs || "";
@@ -118,15 +119,21 @@ const CATEGORY_TERMS = {
 const SETTING_TERMS = ["dungeon","basement","mansion","chamber","cell","prison","courtyard","hall","gallery","collection","outdoor","yard","table","ship","water"];
 
 function messageText(m) {
-  return ((m && m.message) ? m.message : String(m || "")).toLowerCase();
+  if (!m) return "";
+  if (typeof m === "string") return m.toLowerCase();
+  if (typeof m.message === "string") return m.message.toLowerCase();
+  if (typeof m.content === "string") return m.content.toLowerCase();
+  return "";
 }
 
 function getSignals() {
-  const messages = context.chat.last_messages || [];
+  const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages : [];
+  const latest = messageText(context.chat.last_message);
   const start = Math.max(0, messages.length - CONFIG.HISTORY_DEPTH);
-  const recent = messages.slice(start).map(messageText).join(" ");
-  const latest = String(context.chat.last_message || "").toLowerCase();
-  return {recent: recent + " " + latest, latest};
+  const parts = messages.slice(start).map(messageText).filter(Boolean);
+  // JanitorAI may already include last_message in last_messages. Keep one copy only.
+  if (latest && parts.length && parts[parts.length - 1] === latest) parts.pop();
+  return {recent: parts.join(" "), latest};
 }
 
 function includesAny(text, terms) {
@@ -156,7 +163,7 @@ function budgetFromScenario(fallback) {
   const m = String(context.character.scenario || "").match(/\[CONTEXT BUDGET:[^\]]*per_script=(\d+)/i);
   return m ? Math.min(fallback, Math.max(80, parseInt(m[1],10))) : fallback;
 }
-const ACTIVE_MAX_TOKENS = budgetFromScenario(220);
+const ACTIVE_MAX_TOKENS = budgetFromScenario(CONFIG.MAX_TOKENS);
 const ACCESS_TERMS = ["collection","owns","owned","private dungeon","torture chamber","equipment room","device room","museum","gallery","workshop","custom-built","replica","apparatus"];
 const SCENE_TERMS = ["torture","punishment","punish","captive","prisoner","restrain","restraint","shackle","dungeon","torment","device","apparatus","collection"];
 const CAPTIVITY_TERMS = ["kidnap","kidnapped","captive","prisoner","hostage","bound","tied","restrained","locked up","held against","cannot leave","can't leave","cell","dungeon"];
@@ -214,8 +221,9 @@ if (activated) {
   }
 
   const header = "\n[HISTORICAL EQUIPMENT] Supplement {{char}} only; never create motives or cruelty. Use only if the established scene independently makes this equipment relevant. Preserve already-established equipment and access. Modern settings may contain antiques/replicas. Disputed pieces are not proven medieval history.\n";
+  const footer = "These are narrative options, not mandatory actions. If {{char}}'s established motives make punishment, coercion, or restraint appropriate now, {{char}} may independently introduce an appropriate established/accessible device without waiting for {{user}} to request one. Never invent that motive from this module. Choose only as fits personality, location, access, space, and continuity.\n";
   let block = header;
-  let used = estimateTokens(block);
+  let used = estimateTokens(header) + estimateTokens(footer);
   const emitted = [];
 
   for (let i = 0; i < chosen.length; i++) {
@@ -232,14 +240,14 @@ if (activated) {
   }
 
   if (emitted.length) {
-    block += "These are narrative options, not mandatory actions. If {{char}}'s established motives make punishment, coercion, or restraint appropriate now, {{char}} may independently introduce an appropriate established/accessible device without waiting for {{user}} to request one. Never invent that motive from this module. Choose only as fits personality, location, access, space, and continuity.\n";
-    context.character.scenario += block;
+    block += footer;
+    if (estimateTokens(block) <= ACTIVE_MAX_TOKENS) context.character.scenario += block;
   }
 
   if (CONFIG.DEBUG) {
-    console.log("[Historical Equipment v0.2] activation=" + activationScore + " tokens~" + estimateTokens(block) + " access=" + accessEstablished + " emitted=" + emitted.join(","));
-    console.log("[Historical Equipment v0.2] scores=" + scored.slice(0,10).map(x => x.device.id + ":" + x.score.toFixed(2)).join(" | "));
+    console.log("[Historical Equipment v0.3] activation=" + activationScore + " tokens~" + estimateTokens(block) + " access=" + accessEstablished + " emitted=" + emitted.join(","));
+    console.log("[Historical Equipment v0.3] scores=" + scored.slice(0,10).map(x => x.device.id + ":" + x.score.toFixed(2)).join(" | "));
   }
 } else if (CONFIG.DEBUG) {
-  console.log("[Historical Equipment v0.2] inactive activation=" + activationScore);
+  console.log("[Historical Equipment v0.3] inactive activation=" + activationScore);
 }
