@@ -8,3 +8,8 @@ src/themes/** linguist-vendored
 # Large catalogue/content-heavy JavaScript.
 # action_variety_engine.js and dynamic_escalation_engine.js remain counted as JavaScript.
 historical_equipment.js linguist-vendored
+
+# Additional presentation/config sources omitted from language percentages.
+src/components/install/** linguist-vendored
+vite.config.ts linguist-vendored
+action_variety_engine.js linguist-vendored
