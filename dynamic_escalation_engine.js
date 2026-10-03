@@ -122,16 +122,16 @@ const recentMessages = allMessages
 const latest = messageText(context.chat.last_message);
 
 /*
- * JanitorAI may already include last_message in last_messages.
- * Remove one matching final copy so the latest turn receives only
- * the explicit LATEST_WEIGHT below.
+ * JanitorAI exposes last_messages newest first and may also expose the
+ * newest turn separately as last_message. Remove one duplicate newest
+ * copy so the latest turn receives only the explicit LATEST_WEIGHT below.
  */
 if (
   latest &&
   recentMessages.length &&
-  recentMessages[recentMessages.length - 1] === latest
+  recentMessages[0] === latest
 ) {
-  recentMessages.pop();
+  recentMessages.shift();
 }
 
 const recent = recentMessages.join(" ");
