@@ -1,0 +1,3 @@
+
+# Module metadata/configuration is data-like; keep application TS counted.
+src/data/** linguist-vendored
