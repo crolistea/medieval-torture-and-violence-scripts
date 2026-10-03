@@ -1,0 +1,39 @@
+/* No background and no clipping: the curved picture is the only thing in the box. */
+.frame {
+  --fade: 900ms;
+
+  position: relative;
+  aspect-ratio: var(--image-ratio);
+  opacity: 0;
+}
+
+/*
+ * A keyframe animation, not a transition: it always plays from the start,
+ * even when the picture is ready before the browser has drawn the empty box.
+ */
+.shown {
+  opacity: 1;
+  animation: lens-in var(--fade) ease both;
+}
+
+@keyframes lens-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* Animations switched off in the browser or system: the picture is simply there. */
+@media (prefers-reduced-motion: reduce) {
+  .shown {
+    animation: none;
+  }
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

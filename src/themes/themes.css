@@ -29,7 +29,7 @@
   initial-value: #ffffff;
 }
 
-/* Home and general pages: strong blue. */
+/* Spare accent: strong blue. */
 :root,
 [data-theme='blue'] {
   --accent: #2457e6;
@@ -37,18 +37,22 @@
   --on-accent: #ffffff;
 }
 
-/* Medieval Torture Devices: aqua. */
+/* Spare accent: aqua. */
 [data-theme='aqua'] {
   --accent: #1cc4d2;
   --accent-bright: #5fe0ea;
   --on-accent: #021316;
 }
 
-/* Violence and Shit: blood red. The bright value keeps red text readable on black. */
+/*
+ * Home, general pages and the violence modules: the hero red.
+ * The bright value keeps red text readable on black. Text on the red is
+ * black, the same as the header bar.
+ */
 [data-theme='blood'] {
-  --accent: #c1121f;
+  --accent: var(--red);
   --accent-bright: #f2464d;
-  --on-accent: #ffffff;
+  --on-accent: #000000;
 }
 
 :root {

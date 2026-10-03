@@ -1,35 +1,26 @@
+/* The bar is the same red as the home page hero, so the two read as one block. */
 .header {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
+  background: var(--red);
+  color: var(--ink);
+  text-transform: uppercase;
+  user-select: none;
 }
 
-/* Accent edge along the top. It redraws from the left whenever the theme changes. */
-.sweep {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  background: var(--accent);
-  transform-origin: left;
-  animation: sweep 640ms var(--ease-out);
+.header :focus-visible {
+  outline-color: var(--ink);
 }
 
-@keyframes sweep {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
+/* One text size for the name, About and GitHub, and one height that the logo and the GitHub box share. */
 .inner {
+  --bar-text: 1rem;
+  --bar-box: 38px;
+
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 12px;
   height: var(--header-h);
 }
 
@@ -37,33 +28,48 @@
 
 .brand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   margin-right: auto;
   white-space: nowrap;
 }
 
+/*
+ * The logo file has empty space around the artwork: the drawing itself fills
+ * 1133 x 840 of a 1163 x 936 canvas, starting 8px in and 58px down. The box
+ * is the size of the drawing and the image is shifted inside it, so the
+ * drawing's own top and bottom edges are what line up with the GitHub box.
+ * If the file is replaced, these numbers need measuring again.
+ */
+.logo {
+  position: relative;
+  flex: none;
+  height: var(--bar-box);
+  aspect-ratio: 1133 / 840;
+  overflow: hidden;
+}
+
+.logo img {
+  position: absolute;
+  top: calc(-58 / 840 * 100%);
+  left: calc(-8 / 1133 * 100%);
+  height: calc(936 / 840 * 100%);
+  max-width: none;
+}
+
 .brandName {
-  font-size: 1rem;
-  font-weight: 760;
-  font-stretch: 88%;
+  font-size: var(--bar-text);
+  font-weight: 800;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .brandFor {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-dim);
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
 
-/* Desktop navigation */
-
-.navList {
-  display: flex;
-  align-items: stretch;
-  margin: 0;
-}
+/* Navigation */
 
 .navLink {
   position: relative;
@@ -71,30 +77,21 @@
   align-items: center;
   height: var(--header-h);
   padding: 0 14px;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--text-muted);
+  font-size: var(--bar-text);
+  font-weight: 800;
+  letter-spacing: 0.04em;
   white-space: nowrap;
-  transition: color var(--dur-fast) ease;
 }
 
 .navLink::after {
   content: '';
   position: absolute;
-  inset: auto 14px -1px;
-  height: 2px;
-  background: var(--accent-bright);
+  inset: auto 14px 14px;
+  height: 3px;
+  background: var(--ink);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur) var(--ease-out);
-}
-
-.navLink:hover {
-  color: var(--text);
-}
-
-.navLink[aria-current='page'] {
-  color: var(--text);
 }
 
 .navLink[aria-current='page']::after,
@@ -110,120 +107,48 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
+  height: var(--bar-box);
   padding: 0 12px;
-  border: 1px solid var(--line-strong);
-  font-size: 0.875rem;
-  font-weight: 600;
+  border: 2px solid var(--ink);
+  font-size: var(--bar-text);
+  font-weight: 800;
+  letter-spacing: 0.04em;
   white-space: nowrap;
   transition:
-    border-color var(--dur-fast) ease,
+    background-color var(--dur-fast) ease,
     color var(--dur-fast) ease;
 }
 
 .repo:hover {
-  border-color: var(--accent-bright);
-  color: var(--accent-bright);
+  background: var(--ink);
+  color: var(--red);
 }
 
 .repoArrow {
   font-size: 0.85em;
-  color: var(--text-dim);
 }
 
-/* Small-screen menu */
+@media (max-width: 559px) {
+  .brandFor,
+  .repoArrow {
+    display: none;
+  }
 
-.menuButton {
-  display: none;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-right: -10px;
-  border: 1px solid var(--line-strong);
-  font-size: 1.25rem;
-  transition: border-color var(--dur-fast) ease;
-}
-
-.menuButton:hover,
-.menuButton[aria-expanded='true'] {
-  border-color: var(--accent-bright);
-}
-
-.menu {
-  display: none;
-}
-
-@media (max-width: 1023px) {
-  .nav,
+  /* On a phone the repository link is the icon alone. The label stays for screen readers. */
   .repo {
-    display: none;
-  }
-
-  .menuButton {
-    display: grid;
-    margin-right: 0;
-  }
-
-  .menu {
-    position: absolute;
-    inset: 100% 0 auto;
-    display: block;
-    max-height: calc(100dvh - var(--header-h));
-    overflow-y: auto;
-    border-bottom: 1px solid var(--line-strong);
-    background: var(--bg);
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition:
-      opacity var(--dur) ease,
-      transform var(--dur) var(--ease-out),
-      visibility 0s linear var(--dur);
-  }
-
-  .menu[data-open='true'] {
-    visibility: visible;
-    opacity: 1;
-    transform: none;
-    transition-delay: 0s;
-  }
-
-  .menuList {
-    margin: 0;
-    padding-block: 8px 16px;
-  }
-
-  .menuList li + li {
-    border-top: 1px solid var(--line);
-  }
-
-  .menuLink {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: 56px;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     font-size: 1.125rem;
-    font-weight: 600;
-    font-stretch: 92%;
-    color: var(--text-muted);
   }
 
-  .menuLink[aria-current='page'] {
-    color: var(--accent-bright);
-  }
-
-  .menuLink[aria-current='page']::before {
-    content: '';
-    order: 1;
-    width: 10px;
-    height: 10px;
-    background: var(--accent);
-  }
-}
-
-@media (max-width: 420px) {
-  .brandFor {
-    display: none;
+  .repoLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }

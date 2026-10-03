@@ -1,4 +1,5 @@
 import { modules } from '../../data/modules'
+import { scraper } from '../../data/scraper'
 import { site } from '../../data/site'
 import { Link } from '../../router/Link'
 import { paths } from '../../router/paths'
@@ -20,6 +21,11 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link to={paths.scraper} className={styles.link}>
+                {scraper.name}
+              </Link>
+            </li>
             <li>
               <Link to={paths.about} className={styles.link}>
                 About and documentation

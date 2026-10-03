@@ -8,4 +8,4 @@ export const THEME_IDS = ['blue', 'aqua', 'blood'] as const
 export type ThemeId = (typeof THEME_IDS)[number]
 
 /** Used on the home page, About, and anything that is not a module. */
-export const DEFAULT_THEME: ThemeId = 'blue'
+export const DEFAULT_THEME: ThemeId = 'blood'

@@ -9,6 +9,11 @@
   animation: page-in 420ms var(--ease-out);
 }
 
+/* The home hero sits flush under the header and runs its own entry animation. */
+.flush {
+  animation: none;
+}
+
 /* Focus is moved here on navigation for screen readers; no ring is needed. */
 .main:focus {
   outline: none;

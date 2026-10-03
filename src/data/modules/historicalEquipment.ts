@@ -10,10 +10,10 @@ const name = 'Medieval Torture Devices'
 export const historicalEquipment: ModuleDefinition = {
   slug: 'medieval-torture-devices',
   name,
-  kind: 'Prop knowledge',
-  theme: 'aqua',
+  theme: 'blood',
   tagline:
     'Gives your character accurate knowledge of historical punishment, restraint and confinement equipment, only when the scene calls for it.',
+  blurb: 'Real punishment and restraint equipment, described accurately.',
   script,
   settings: [
     {

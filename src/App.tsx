@@ -8,9 +8,11 @@ import { AboutPage } from './pages/AboutPage'
 import { HomePage } from './pages/HomePage'
 import { ModulePage } from './pages/ModulePage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { ScraperPage } from './pages/ScraperPage'
 import { useHashPath } from './router/hashRouter'
 import { moduleSlugFromPath, paths } from './router/paths'
 import { DEFAULT_THEME } from './themes/themes'
+import { cx } from './utils/cx'
 
 export default function App() {
   const pathname = useHashPath()
@@ -20,7 +22,7 @@ export default function App() {
   const moduleSlug = moduleSlugFromPath(pathname)
   const activeModule = moduleSlug ? findModule(moduleSlug) : undefined
 
-  // A module page takes the module's accent. Everything else uses the home blue.
+  // A module page takes the module's accent. Everything else uses the home red.
   const theme = activeModule?.theme ?? DEFAULT_THEME
   useTheme(theme)
 
@@ -41,6 +43,7 @@ export default function App() {
   let page
   if (pathname === paths.home) page = <HomePage />
   else if (pathname === paths.about) page = <AboutPage />
+  else if (pathname === paths.scraper) page = <ScraperPage />
   else if (activeModule) page = <ModulePage module={activeModule} />
   else page = <NotFoundPage />
 
@@ -49,9 +52,15 @@ export default function App() {
       <a href="#main" className={styles.skip} onClick={skipToContent}>
         Skip to content
       </a>
-      <SiteHeader pathname={pathname} theme={theme} />
+      <SiteHeader pathname={pathname} />
       {/* The key replays the entry animation on every page change. */}
-      <main id="main" ref={mainRef} tabIndex={-1} key={pathname} className={styles.main}>
+      <main
+        id="main"
+        ref={mainRef}
+        tabIndex={-1}
+        key={pathname}
+        className={cx(styles.main, pathname === paths.home && styles.flush)}
+      >
         {page}
       </main>
       <SiteFooter />

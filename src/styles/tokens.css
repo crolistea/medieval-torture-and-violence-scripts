@@ -1,14 +1,14 @@
 /*
  * Design tokens.
- * One dark theme, square corners everywhere, one accent at a time.
+ * One dark theme on pure black, square corners everywhere, one accent at a time.
  * Accent values live in src/themes/themes.css.
  */
 
 :root {
   color-scheme: dark;
 
-  /* Surfaces: cool near-black, never pure #000. */
-  --bg: #07090c;
+  /* Surfaces. The page itself is pure black. */
+  --bg: #000000;
   --surface: #0b0e13;
   --surface-raised: #11151c;
   --line: #1c222b;
@@ -19,9 +19,18 @@
   --text-muted: #9ea9b8;
   --text-dim: #7b8696;
 
+  /* The red of the home page hero and the logo, and the ink that sits on it. */
+  --red: #a10000;
+  --ink: #000000;
+
   /* Type */
+  /* The headline face. Swap the first name for 'Metal Mania' or 'Isometra' to go back to an earlier one. */
+  --font-display: 'Rubik Glitch', 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
   --font-sans: 'Archivo Variable', 'Helvetica Neue', Arial, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Every script image is cropped to this one shape, wherever it appears. */
+  --image-ratio: 3 / 2;
 
   /* Layout */
   --container: 1240px;
@@ -38,7 +47,6 @@
   /* Layers. Keep every z-index in the project on this scale. */
   --z-stepper: 20;
   --z-header: 40;
-  --z-grain: 60;
 }
 
 @media (max-width: 639px) {

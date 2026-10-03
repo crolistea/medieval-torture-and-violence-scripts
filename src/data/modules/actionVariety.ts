@@ -10,10 +10,10 @@ const name = 'Violence and Shit'
 export const actionVariety: ModuleDefinition = {
   slug: 'violence-and-shit',
   name,
-  kind: 'Prose variety',
   theme: 'blood',
   tagline:
     'Offers your character varied ways to play a confrontation that is already happening, so fights stop repeating the same moves.',
+  blurb: 'Fights that stop repeating the same moves.',
   script,
   settings: [
     {

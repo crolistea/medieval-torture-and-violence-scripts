@@ -61,11 +61,11 @@ export interface ModuleDefinition {
   slug: string
   /** Shown in the navigation, on the home page and as the page heading. */
   name: string
-  /** Two-word category shown above the name on the home page. */
-  kind: string
   theme: ThemeId
-  /** One sentence for the home page. */
+  /** One sentence for the documentation page. */
   tagline: string
+  /** A few words under the name in the home page catalogue. */
+  blurb: string
   script: ScriptSource
   /** Settings a reader may want to tune, for the documentation page. */
   settings: ModuleSetting[]

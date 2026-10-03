@@ -1,0 +1,137 @@
+.catalogue {
+  padding-top: clamp(24px, 3.2vw, 44px);
+  background: #000000;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(36px, 4vw, 56px) 24px;
+  margin: 0;
+}
+
+.item {
+  /* Where the pointer is over the tile, from -0.5 to 0.5. Set in Catalogue.tsx. */
+  --px: 0;
+  --py: 0;
+
+  position: relative;
+  perspective: 900px;
+}
+
+/*
+ * The image slot. Every image is cropped to the same window.
+ * A script with no image keeps the outlined empty slot.
+ */
+.frame {
+  aspect-ratio: var(--image-ratio);
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: #000000;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  transition: transform 420ms var(--ease-out);
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 520ms var(--ease-out),
+    filter 320ms ease;
+}
+
+.name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  transition: opacity 320ms ease;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 4px;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: -0.12em;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--dur) ease,
+    transform var(--dur) var(--ease-out);
+}
+
+.item:hover .arrow,
+.item:focus-within .arrow {
+  opacity: 1;
+  transform: none;
+}
+
+.blurb {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  transition: opacity 320ms ease;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(40px, 5vw, 72px);
+}
+
+/*
+ * Hover, for a mouse only.
+ * The tile under the pointer leans toward it while its image pushes in and
+ * slides the other way. Every other tile drains to grey and steps back.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .grid:has(.item:hover) .item:not(:hover) img {
+    filter: grayscale(1) brightness(0.4);
+  }
+
+  .grid:has(.item:hover) .item:not(:hover) .name,
+  .grid:has(.item:hover) .item:not(:hover) .blurb {
+    opacity: 0.4;
+  }
+
+  .item:hover img {
+    transform: scale(1.14);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .item:hover .frame {
+    transform: rotateY(calc(var(--px) * 16deg)) rotateX(calc(var(--py) * -14deg)) scale(1.02);
+  }
+
+  .item:hover img {
+    transform: translate(calc(var(--px) * -22px), calc(var(--py) * -16px)) scale(1.14);
+  }
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

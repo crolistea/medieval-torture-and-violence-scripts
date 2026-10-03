@@ -2,6 +2,7 @@
 export const paths = {
   home: '/',
   about: '/about',
+  scraper: '/scraper',
   module: (slug: string) => `/modules/${slug}`,
 } as const
 

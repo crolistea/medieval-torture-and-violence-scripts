@@ -1,0 +1,48 @@
+.teaser {
+  margin-top: var(--section-gap);
+}
+
+/* The same lifted panel as the code panel on a script page. */
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 28px clamp(32px, 5vw, 80px);
+  align-items: end;
+  padding: clamp(24px, 4vw, 56px);
+  border: 1px solid var(--line-strong);
+  background: #000000;
+  box-shadow: 12px 12px 0 var(--accent);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.6vw, 5.25rem);
+  font-weight: 400;
+  line-height: 0.9;
+  text-transform: uppercase;
+  /* Never split the name in the middle of a word. */
+  overflow-wrap: normal;
+}
+
+.side {
+  display: grid;
+  justify-items: start;
+  gap: 24px;
+}
+
+.blurb {
+  max-width: 38ch;
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+}
+
+.cta:hover svg {
+  transform: translateX(4px);
+}
+
+@media (max-width: 899px) {
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    box-shadow: 8px 8px 0 var(--accent);
+  }
+}

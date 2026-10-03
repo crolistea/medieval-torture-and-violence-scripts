@@ -4,16 +4,16 @@ import { buildInstallSteps } from '../installFlow'
 import type { ModuleDefinition } from '../types'
 
 const script = createScriptSource('dynamic_escalation_engine.js', raw)
-const name = 'Very Very Extreme Violence Engine'
+const name = 'Very Very Hostile Brutality Engine'
 
 export const extremeViolence: ModuleDefinition = {
   slug: 'very-very-extreme-violence',
   name,
-  kind: 'Dynamic escalation',
   theme: 'blood',
   tagline:
     'Tracks how intense the current scene actually is, lets conflict build when the story supports it, and allows the scene to cool back down instead of escalating forever.',
-
+  blurb: 'Conflict that builds, then cools back down.',
+  
   script,
 
   settings: [

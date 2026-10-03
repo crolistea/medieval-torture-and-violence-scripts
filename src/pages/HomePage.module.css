@@ -1,16 +1,80 @@
-/* The home page opens straight on the module list. */
+/*
+ * The hero is a flat red poster under the red bar. Together they fill 85% of
+ * the screen, so the top of the catalogue is always in view underneath.
+ *
+ * The headline is real text on a plane that turns away from the reader:
+ * full size at the left edge, shrinking toward a vanishing point on the right.
+ */
 
 .hero {
-  padding-top: clamp(36px, 6vw, 80px);
+  /*
+   * HEADLINE PERSPECTIVE. Change these two numbers, nothing else.
+   *
+   * --tilt   how far the text swings away from you. 0deg is flat, 60deg is extreme.
+   * --depth  how close you stand to it. Smaller shrinks the far end harder:
+   *          3 is dramatic, 6 is gentle.
+   *
+   * The headline resizes itself to keep fitting the hero whatever you pick.
+   */
+  --tilt: 50deg;
+  --depth: 4;
+
+  /* How much of the screen the bar and hero take together. */
+  --hero-h: max(calc(85svh - var(--header-h)), 220px);
+
+  /* Width of the longest line in ems. HomePage.tsx measures the real value. */
+  --len: 9.82;
+  /* How wide the turned headline ends up, in ems. */
+  --spread: calc(
+    var(--len) * cos(var(--tilt)) * var(--depth) / (var(--depth) + var(--len) * sin(var(--tilt)))
+  );
+  --pad: clamp(12px, 1.6vw, 20px);
+  /* From the left edge of the page column to the right edge of the screen. */
+  --room: min(100vw - var(--gutter) * 2, 50vw + var(--container) / 2 - var(--gutter));
+  /* As large as two lines fit the height, unless the width runs out first. */
+  --size: min(calc((var(--hero-h) - var(--pad) * 2) / 1.72), calc(var(--room) / var(--spread)));
+
+  display: grid;
+  /* Without this the oversized headline widens the column and shifts it off the page edge. */
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  height: var(--hero-h);
+  overflow: hidden;
+  background: var(--red);
+  color: var(--ink);
+}
+
+.inner {
+  padding-block: var(--pad);
 }
 
 .title {
-  margin-bottom: clamp(28px, 4vw, 48px);
-  font-size: clamp(2.5rem, 5.6vw + 0.6rem, 5.25rem);
-  font-weight: 780;
-  font-stretch: 78%;
-  letter-spacing: -0.025em;
-  line-height: 0.96;
+  width: max-content;
+  font-family: var(--font-display);
+  font-size: var(--size);
+  font-weight: 400;
+  line-height: 0.86;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  transform: perspective(calc(var(--depth) * 1em)) rotateY(var(--tilt));
+  transform-origin: 0 50%;
+}
+
+.line {
+  display: block;
+  animation: line-in 720ms var(--ease-out) both;
+}
+
+.line + .line {
+  animation-delay: 90ms;
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.18em);
+  }
 }
 
 /* "The card stays in charge": statement left, terms right. */

@@ -1,14 +1,237 @@
+/*
+ * The whole page fits one screen: a title row, then the rail beside the
+ * stage. The stage holds the image with the code panel standing in front of it.
+ */
+
 .page {
-  padding-top: clamp(36px, 6vw, 80px);
+  --top-h: 44px;
+  --pad: clamp(18px, 2.4vw, 32px);
+  /* Fills the screen under the title row, within limits so the panel never gets squat or towering. */
+  --stage-h: clamp(440px, calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 3), 760px);
+
+  position: relative;
+  isolation: isolate;
+}
+
+.inner {
+  padding-block: var(--pad);
+}
+
+/* Title row */
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: var(--pad);
+}
+
+.back {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--top-h);
+  height: var(--top-h);
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 1.25rem;
+  transition:
+    background-color var(--dur-fast) ease,
+    transform var(--dur-fast) ease;
+}
+
+.back svg {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.back:hover {
+  background: var(--text);
+}
+
+.back:hover svg {
+  transform: translateX(-3px);
+}
+
+.back:active {
+  transform: scale(0.96);
 }
 
 .title {
-  margin-bottom: clamp(36px, 5vw, 64px);
-  padding-bottom: clamp(20px, 3vw, 32px);
-  border-bottom: 2px solid var(--accent);
-  font-size: clamp(2.5rem, 5.2vw + 0.6rem, 5rem);
+  font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
   font-weight: 780;
   font-stretch: 78%;
-  letter-spacing: -0.025em;
-  line-height: 0.96;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+/* Rail and stage */
+
+.body {
+  display: grid;
+  grid-template-columns: clamp(120px, 11vw, 168px) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 80px);
+  height: var(--stage-h);
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* The image runs a little way under the panel, so the panel reads as standing in front. */
+.shot {
+  margin-right: -9%;
+}
+
+/* A script with no image keeps an outlined slot in its place. */
+.empty {
+  aspect-ratio: var(--image-ratio);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+/* The code panel */
+
+.panel {
+  position: relative;
+  display: grid;
+  /* The explicit column stops a long file name from widening the panel. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  border: 1px solid var(--line-strong);
+  background: #000000;
+  /* A hard offset block, not a soft shadow: the panel is lifted, the page stays flat. */
+  box-shadow: 12px 12px 0 var(--accent);
+  /*
+   * The panel opens nearer the middle of the stage. As the image fades in
+   * beside it, it is pushed out to its place on the right, in the same time
+   * the image takes to appear.
+   */
+  transform: translateX(-34%);
+  animation: panel-in 420ms ease both;
+}
+
+.settled .panel {
+  transform: none;
+  animation:
+    panel-in 420ms ease both,
+    panel-push 900ms ease both;
+}
+
+/* Animations switched off in the browser or system: the panel starts in its final place and never moves. */
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .settled .panel {
+    transform: none;
+    animation: none;
+  }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 12px 12px 18px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.filename {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar .copy {
+  flex: none;
+}
+
+.code {
+  padding: 18px;
+  overflow: auto;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  white-space: pre;
+  tab-size: 2;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.code:focus-visible {
+  outline-offset: -2px;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes panel-push {
+  from {
+    transform: translateX(-34%);
+  }
+}
+
+/*
+ * Narrow screens: the image leaves the stage and becomes a dimmed backdrop
+ * for the whole page. The panel sits on it, with the rail laid flat below.
+ */
+@media (max-width: 899px) {
+  .page {
+    --stage-h: clamp(320px, calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 4 - 120px), 560px);
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.72)),
+      var(--backdrop, none) center / cover no-repeat;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--pad);
+    height: auto;
+  }
+
+  .stage {
+    display: block;
+    height: var(--stage-h);
+  }
+
+  .shot {
+    display: none;
+  }
+
+  /* No image beside it here, so the panel has nothing to make room for. */
+  .panel,
+  .settled .panel {
+    box-shadow: 8px 8px 0 var(--accent);
+    transform: none;
+    animation: panel-in 420ms ease both;
+  }
+
+  .bar {
+    padding: 10px 10px 10px 14px;
+  }
+
+  .code {
+    padding: 14px;
+    font-size: 0.75rem;
+  }
 }
