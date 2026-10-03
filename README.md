@@ -62,7 +62,7 @@ The script starts with `"use worker";`, guards writable context fields, reads `c
 
 A guided installation site for the modules lives in `src/` (React, TypeScript, Vite). Pushing to `main` builds and deploys it to GitHub Pages through `.github/workflows/pages.yml`:
 
-<https://sawyer100.github.io/medieval-shit-and-violence-script/>
+<https://sawyer100.github.io/medieval-torture-and-violence-scripts/>
 
 ```sh
 npm install
