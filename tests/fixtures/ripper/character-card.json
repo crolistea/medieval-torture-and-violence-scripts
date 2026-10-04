@@ -1,0 +1,26 @@
+{
+  "spec": "chara_card_v2",
+  "data": {
+    "name": "Mira",
+    "description": "A smith.",
+    "character_book": {
+      "name": "Mira's book",
+      "entries": [
+        {
+          "id": 1,
+          "keys": ["forge"],
+          "secondary_keys": ["anvil"],
+          "content": "The forge never goes cold.",
+          "name": "The Forge",
+          "comment": "main location",
+          "insertion_order": 7,
+          "priority": 2,
+          "enabled": true,
+          "case_sensitive": true,
+          "position": "before_char",
+          "extensions": { "depth": 2 }
+        }
+      ]
+    }
+  }
+}

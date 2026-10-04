@@ -1,0 +1,32 @@
+[
+  {
+    "key": ["harbor", "docks"],
+    "keysRaw": "harbor, docks",
+    "keysecondary": ["night"],
+    "content": "A crowded harbor that smells of tar.",
+    "comment": "The Harbor",
+    "insertion_order": 10,
+    "priority": 3,
+    "category": "place",
+    "enabled": true,
+    "constant": false,
+    "selective": true,
+    "selectiveLogic": 0,
+    "case_sensitive": false,
+    "probability": 100,
+    "uid": 0
+  },
+  {
+    "name": "Captain Voss",
+    "keys": "voss, the captain",
+    "content": "Captain Voss runs the night watch.",
+    "insertion_order": 20,
+    "enabled": false
+  },
+  {
+    "name": "Keys but no body",
+    "keys": ["ghost"]
+  },
+  {},
+  "not an entry"
+]
