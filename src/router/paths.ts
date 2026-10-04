@@ -3,6 +3,7 @@ export const paths = {
   home: '/',
   about: '/about',
   scraper: '/scraper',
+  calculator: '/calculator',
   module: (slug: string) => `/modules/${slug}`,
 } as const
 
