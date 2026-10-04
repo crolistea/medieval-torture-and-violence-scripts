@@ -86,7 +86,13 @@ function ripJson(text: string, warnings: string[]): RipResult {
     value = parseJson(text)
   } catch (error) {
     // JSON written the JavaScript way (single quotes, bare field names, a last comma) is still readable.
-    const loose = readLooseLiteral(text)
+    let loose
+    try {
+      loose = readLooseLiteral(text)
+    } catch {
+      loose = null
+    }
+    // Still unreadable: report it as the JSON problem it is.
     if (!loose) throw error
     value = loose.value
     warnings.push('This is not strict JSON (single quotes, bare field names or a trailing comma). It was read as a JavaScript value.')
