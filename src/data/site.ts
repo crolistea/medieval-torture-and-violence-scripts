@@ -2,7 +2,7 @@
 const repoUrl = 'https://github.com/sawyer100/medieval-torture-and-violence-scripts'
 
 export const site = {
-  name: 'VIOLENCE',
+  name: 'VIOLENCE!',
   platform: 'JanitorAI',
   title: 'Script Modules for JanitorAI',
   repoUrl,
