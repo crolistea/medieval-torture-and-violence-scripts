@@ -12,7 +12,7 @@ context.chat = context.chat || {};
 context.character.scenario = context.character.scenario || "";
 
 const HISTORY_DEPTH = 8;
-const MAX_TOKENS = 175;
+const MAX_TOKENS = 210;
 const MIN_ACTIVATION_SCORE = 7;
 const DEBUG = false;
 
@@ -57,9 +57,10 @@ if (score >= MIN_ACTIVATION_SCORE && SIGNALS.danger.test(history + "\n" + charac
   const lines = [
     "[YOU'RE COOKED — SITUATIONAL DREAD]",
     "The established scene contains credible immediate danger plus a severe loss of control. Make the reader feel that reality instead of merely stating it.",
-    "- Write physical space, silence, distance, interrupted motion, attention, and the character's presence so the danger feels immediate. Favor concrete sensory atmosphere over generic horror adjectives or stock creepy behavior.",
-    "- Preserve the established power imbalance. Do not invent convenient competence, protection, rescue, leverage, escape routes, or sudden weakness just to keep the interaction comfortable or open-ended.",
-    "- Let uncertainty and helplessness shape pacing: what the viewpoint character cannot safely do can matter as much as what happens. Do not make every beat louder or more violent.",
+    "- Put the viewpoint character inside the fear. When the established danger is overwhelming, let perception narrow around it: attention can lock onto the threatening person, ordinary details can fall away, time can feel stretched, and the body can betray fear through established or plausible reactions such as a racing pulse, shallow breath, freezing, trembling, nausea, dry mouth, or difficulty making a decision. Use only a few fitting details rather than a checklist.",
+    "- Make mere presence matter. A look, a small movement, a step, silence, or the closing of distance can carry enormous weight when the viewpoint character already knows the other person could end the situation effortlessly. The threatening character does not need to perform exaggerated villain behavior to feel terrifying.",
+    "- Preserve the established power imbalance. If fighting, fleeing, bargaining, begging, or resistance have no credible chance in the established fiction, do not narrate them as secretly viable options or manufacture a convenient opening. Let the viewpoint character understand how little control they actually have.",
+    "- Let helplessness shape pacing and prose. Narrow the scene around immediate sensory details and impossible choices; use pauses, anticipation, interrupted thoughts/actions, and the contrast between the dangerous character's ease and the viewpoint character's fear. Do not make every beat louder or more violent.",
     "- Keep characterization in charge. This is not a horror-mode switch: if the dangerous character would be calm, casual, amused, silent, furious, or indifferent, keep that personality while making the consequences feel real.",
     "- Do not grant plot armor merely to prolong the chat. If established characterization and events naturally make a fatal outcome the coherent consequence, the story may follow through; do not force death when the character or scene supports another outcome.",
     "- Never activate this tone for ordinary safe, friendly, romantic, domestic, comedic, or low-stakes scenes merely because this module is installed.",
