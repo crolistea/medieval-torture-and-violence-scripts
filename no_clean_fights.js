@@ -7,6 +7,10 @@
  * present without escalating violence or inventing new injuries.
  */
 
+context.character = context.character || {};
+context.chat = context.chat || {};
+context.character.scenario = context.character.scenario || "";
+
 const HISTORY_DEPTH = 6;
 const MAX_TOKENS = 180;
 const MIN_ACTIVATION_SCORE = 3;
@@ -24,7 +28,7 @@ const SIGNALS = {
 function textOf(m) {
   if (!m) return "";
   if (typeof m === "string") return m;
-  return String(m.content ?? m.text ?? "");
+  return String(m.message ?? m.content ?? m.text ?? "");
 }
 
 const messages = Array.isArray(context?.chat?.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
