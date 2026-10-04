@@ -26,6 +26,7 @@ export const impactProfiles: ImpactProfile[] = [
   { slug: 'say-something-horrible', maxTokens: 125, typicalTokens: 115, activation: 'situational', strength: 4, domains: ['dialogue', 'style'], sharedBudget: 'dialogue', note: 'Shares a 360-token ceiling with the other dialogue/intent modules.' },
   { slug: 'malice-aforethought', maxTokens: 130, typicalTokens: 120, activation: 'situational', strength: 4, domains: ['intent'], sharedBudget: 'dialogue', note: 'Reinforces motive and intention continuity when the scene supports it.' },
   { slug: 'the-quiet-part', maxTokens: 125, typicalTokens: 110, activation: 'rare', strength: 3, domains: ['dialogue', 'intent'], sharedBudget: 'dialogue', note: 'Requires both a guarded character and meaningful conversational pressure.' },
+  { slug: 'youre-cooked', maxTokens: 210, typicalTokens: 170, activation: 'rare', strength: 4, domains: ['style', 'continuity'], note: 'Activates only when recent context establishes both credible danger and helplessness.' },
 ]
 
 export const impactProfileBySlug = new Map(impactProfiles.map((profile) => [profile.slug, profile]))

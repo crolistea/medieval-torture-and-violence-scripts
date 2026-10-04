@@ -8,6 +8,7 @@ import { maliceAforethought } from './maliceAforethought'
 import { saySomethingHorrible } from './saySomethingHorrible'
 import { theQuietPart } from './theQuietPart'
 import { stopSmirking } from './stopSmirking'
+import { youreCooked } from './youreCooked'
 
 /*
  * The module registry. The home page, navigation, routes and documentation
@@ -29,6 +30,7 @@ export const modules: ModuleDefinition[] = [
   saySomethingHorrible,
   maliceAforethought,
   theQuietPart,
+  youreCooked,
 ]
 
 export function findModule(slug: string): ModuleDefinition | undefined {

@@ -83,7 +83,11 @@
 
 /* The image runs a little way under the panel, so the panel reads as standing in front. */
 .shot {
+  position: relative;
+  z-index: 1;
   margin-right: -9%;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 24%, transparent))
+    drop-shadow(0 0 52px color-mix(in srgb, var(--accent) 12%, transparent));
 }
 
 /* A script with no image keeps an outlined slot in its place. */
