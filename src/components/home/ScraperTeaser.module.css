@@ -20,6 +20,7 @@
   font-weight: 400;
   line-height: 0.9;
   text-transform: uppercase;
+  color: var(--accent);
   /* Never split the name in the middle of a word. */
   overflow-wrap: normal;
 }
