@@ -4,6 +4,8 @@ import { sources } from '../data/janitor'
 import { modules } from '../data/modules'
 import { actionVariety } from '../data/modules/actionVariety'
 import { historicalEquipment } from '../data/modules/historicalEquipment'
+import { sceneAftermath } from '../data/modules/sceneAftermath'
+import { ripper } from '../data/ripper'
 import { site } from '../data/site'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { Link } from '../router/Link'
@@ -23,6 +25,8 @@ const REPOSITORY_FILES = [
   { path: 'README.md', note: `Overview of ${historicalEquipment.name}.` },
   { path: 'docs/DESIGN.md', note: 'How scoring, detail levels and the token budget work.' },
   { path: 'docs/ACTION_VARIETY.md', note: `Design notes and safeguards for ${actionVariety.name}.` },
+  { path: 'docs/SCENE_AFTERMATH.md', note: `What ${sceneAftermath.name} carries forward and how recovery is judged.` },
+  { path: 'docs/RIPPER.md', note: `Input formats, output shape and errors of ${ripper.name}.` },
   { path: 'tests/test-scenarios.md', note: `Behaviour checks for ${historicalEquipment.name}.` },
   { path: 'tests/combined-modules.md', note: 'Checks for running both modules together.' },
 ]
