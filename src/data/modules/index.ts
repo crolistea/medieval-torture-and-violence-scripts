@@ -5,6 +5,7 @@ import { extremeViolence } from './extremeViolence'
 import { historicalEquipment } from './historicalEquipment'
 import { noCleanFights } from './noCleanFights'
 import { maliceAforethought } from './maliceAforethought'
+import { sceneAftermath } from './sceneAftermath'
 import { saySomethingHorrible } from './saySomethingHorrible'
 import { theQuietPart } from './theQuietPart'
 import { stopSmirking } from './stopSmirking'
@@ -27,6 +28,7 @@ export const modules: ModuleDefinition[] = [
   stopSmirking,
   noCleanFights,
   bloodloss,
+  sceneAftermath,
   saySomethingHorrible,
   maliceAforethought,
   theQuietPart,
