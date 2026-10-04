@@ -12,7 +12,8 @@
     "test": "node --test \"tests/*.test.mjs\"",
     "test:dialogue": "node --test tests/dialogue-modules.test.mjs",
     "test:aftermath": "node --test tests/scene-aftermath.test.mjs",
-    "test:ripper": "node --test tests/ripper.test.mjs"
+    "test:ripper": "node --test tests/ripper.test.mjs",
+    "rip": "node tools/ripper/cli.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
