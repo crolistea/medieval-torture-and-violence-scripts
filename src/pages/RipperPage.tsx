@@ -1,11 +1,12 @@
-import { useId, useState } from 'react'
+import { useId, useRef, useState, type DragEvent } from 'react'
 import { Button } from '../components/ui/Button'
-import { ArrowUpRightIcon, WarningIcon } from '../components/ui/icons'
+import { ArrowUpRightIcon, UploadSimpleIcon, WarningIcon } from '../components/ui/icons'
 import { RichText } from '../components/ui/RichText'
 import { ripper } from '../data/ripper'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { rip, RipError, type RipEntry, type RipResult } from '../ripper/index.ts'
 import { cx } from '../utils/cx'
+import { formatSize } from '../utils/scriptSource'
 import styles from './RipperPage.module.css'
 
 type Outcome = { ok: true; result: RipResult } | { ok: false; error: RipError }
@@ -76,6 +77,9 @@ export function RipperPage() {
   const [input, setInput] = useState('')
   const [outcome, setOutcome] = useState<Outcome | null>(null)
   const [shown, setShown] = useState(PREVIEW_STEP)
+  const [fileName, setFileName] = useState<string | null>(null)
+  const [dragging, setDragging] = useState(false)
+  const picker = useRef<HTMLInputElement>(null)
 
   const read = (text: string) => {
     setOutcome(run(text))
@@ -84,18 +88,49 @@ export function RipperPage() {
 
   const change = (text: string) => {
     setInput(text)
+    setFileName(null)
     // The old result no longer matches what is in the box.
     setOutcome(null)
   }
 
   const loadExample = () => {
     setInput(ripper.example)
+    setFileName(null)
     read(ripper.example)
   }
 
   const clear = () => {
     setInput('')
+    setFileName(null)
     setOutcome(null)
+  }
+
+  // The file is read by the browser, on this device. It is not sent anywhere.
+  const loadFile = async (file: File | undefined) => {
+    if (!file) return
+    if (file.size > ripper.maxFileBytes) {
+      setOutcome({
+        ok: false,
+        error: new RipError('empty', `${file.name} is ${formatSize(file.size)}, which is too large to read here.`, {
+          hint: `The limit is ${formatSize(ripper.maxFileBytes)}. Lorebooks and scripts are text and are normally far smaller.`,
+        }),
+      })
+      return
+    }
+    try {
+      const text = await file.text()
+      setInput(text)
+      setFileName(file.name)
+      read(text)
+    } catch {
+      setOutcome({ ok: false, error: new RipError('empty', `${file.name} could not be read as text.`) })
+    }
+  }
+
+  const drop = (event: DragEvent<HTMLElement>) => {
+    event.preventDefault()
+    setDragging(false)
+    void loadFile(event.dataTransfer.files[0])
   }
 
   const result = outcome?.ok ? outcome.result : null
@@ -114,7 +149,16 @@ export function RipperPage() {
       </header>
 
       <div className={styles.grid}>
-        <section className={styles.panel} aria-labelledby={`${inputId}-title`}>
+        <section
+          className={cx(styles.panel, dragging && styles.dragging)}
+          aria-labelledby={`${inputId}-title`}
+          onDragOver={(event) => {
+            event.preventDefault()
+            setDragging(true)
+          }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={drop}
+        >
           <div className={styles.bar}>
             <h2 id={`${inputId}-title`} className={styles.barTitle}>
               Input
@@ -142,10 +186,31 @@ export function RipperPage() {
             <Button size="lg" onClick={() => read(input)} disabled={!input.trim()} fullWidthOnMobile>
               Rip it
             </Button>
+            <Button variant="secondary" size="lg" onClick={() => picker.current?.click()} fullWidthOnMobile>
+              <UploadSimpleIcon aria-hidden="true" weight="bold" />
+              Choose a file
+            </Button>
             <Button variant="secondary" size="lg" onClick={clear} disabled={!input && !outcome} fullWidthOnMobile>
               Clear
             </Button>
+            <input
+              ref={picker}
+              type="file"
+              className="visually-hidden"
+              accept=".json,.js,.mjs,.txt,.md,application/json,text/javascript,text/plain"
+              tabIndex={-1}
+              aria-hidden="true"
+              onChange={(event) => {
+                void loadFile(event.target.files?.[0])
+                // Lets the same file be chosen again after an edit.
+                event.target.value = ''
+              }}
+            />
           </div>
+
+          <p className={styles.fileNote}>
+            {fileName ? `Loaded ${fileName}.` : 'You can also drop a .json, .js or .txt file onto this panel.'}
+          </p>
 
           <p className={styles.privacy}>{ripper.privacy}</p>
         </section>

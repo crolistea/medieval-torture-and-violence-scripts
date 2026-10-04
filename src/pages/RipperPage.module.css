@@ -118,6 +118,19 @@
   gap: 12px;
 }
 
+.fileNote {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+}
+
+/* A file is being held over the panel. */
+.dragging .input {
+  border-color: var(--accent-bright);
+  border-style: dashed;
+}
+
 .privacy {
   max-width: 60ch;
   font-size: 0.875rem;
