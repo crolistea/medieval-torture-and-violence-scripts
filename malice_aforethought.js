@@ -41,8 +41,8 @@ function msg(m) {
   return String(m.message ?? m.content ?? m.text ?? "").toLowerCase();
 }
 const card = [context.character.personality, context.character.description || "", context.character.scenario, context.character.first_message || ""].join(" ").toLowerCase();
-const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(-HISTORY_DEPTH) : [];
-const latest = msg(context.chat.last_message) || msg(messages[messages.length - 1]);
+const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
+const latest = msg(context.chat.last_message) || msg(messages[0]);
 const recent = messages.map(msg).filter(Boolean).join(" ");
 
 const intentional = ["calculating","scheming","manipulative","strategic","methodical","controlling","possessive","jealous","vindictive","sadistic","cruel","malicious","deceptive","ruthless"];
