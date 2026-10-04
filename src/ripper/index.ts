@@ -1,5 +1,6 @@
+import { readJavascript, readLooseLiteral } from './javascript.ts'
 import { findInJson, parseJson } from './json.ts'
-import { normalizeAll } from './normalize.ts'
+import { looksLikeEntry, normalizeAll } from './normalize.ts'
 import { FORMAT_LABELS, RipError, type RipEntry, type RipFormat, type RipResult } from './types.ts'
 
 /*
@@ -42,8 +43,65 @@ export function rip(input: string): RipResult {
   const text = unwrap(input)
   const warnings: string[] = []
 
-  const found = findInJson(parseJson(text))
+  if (text[0] === '{' || text[0] === '[') return ripJson(text, warnings)
+  return ripJavascript(text, {}, warnings)
+}
+
+function ripJson(text: string, warnings: string[]): RipResult {
+  let value: unknown
+  try {
+    value = parseJson(text)
+  } catch (error) {
+    // JSON written the JavaScript way (single quotes, bare field names, a last comma) is still readable.
+    const loose = readLooseLiteral(text)
+    if (!loose) throw error
+    value = loose.value
+    warnings.push('This is not strict JSON (single quotes, bare field names or a trailing comma). It was read as a JavaScript value.')
+  }
+
+  const found = findInJson(value)
+  if (found.javascript !== undefined) return ripJavascript(found.javascript, found.source, warnings, 'script-record-json')
   return finish(found.format, found.source, normalizeAll(found.entries, warnings), warnings)
+}
+
+function ripJavascript(text: string, source: Record<string, unknown>, warnings: string[], format: RipFormat = 'javascript'): RipResult {
+  const read = readJavascript(text)
+  warnings.push(...read.warnings)
+
+  if (!read.lists.length) {
+    throw new RipError('no-entries', 'This is JavaScript, but no list of entries was found in it.', {
+      hint: read.variables.length
+        ? `Variables seen: ${read.variables.slice(0, 12).join(', ')}${read.variables.length > 12 ? ', ...' : ''}. None of them is a list of objects with fields such as "name", "keys" or "content".`
+        : 'Expected something like: const entries = [{ keys: [...], content: "..." }]',
+    })
+  }
+
+  const entries: RipEntry[] = []
+  for (const list of read.lists) {
+    const before = entries.length
+    for (const entry of normalizeAll(list.entries.filter(looksLikeEntry), warnings)) {
+      entry.index = entries.length + 1
+      // With several lists in one script, the variable name is the only thing that tells them apart.
+      if (read.lists.length > 1 && list.variable && entry.category === null) {
+        entry.category = list.variable
+        entry.inferred.push('category')
+      }
+      entries.push(entry)
+    }
+    const dropped = list.entries.length - (entries.length - before)
+    if (dropped) warnings.push(`${dropped} item${dropped === 1 ? '' : 's'} in ${list.variable ?? `the list at line ${list.line}`} did not look like entries and were skipped.`)
+  }
+
+  return finish(
+    format,
+    {
+      ...source,
+      lists: read.lists.map((list) => ({ variable: list.variable, line: list.line, entries: list.entries.length })),
+      ...(read.settings ? { settings: read.settings } : {}),
+    },
+    entries,
+    warnings,
+  )
 }
 
 /** The clean output, as text ready to save or copy. */
