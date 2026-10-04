@@ -7,6 +7,10 @@
  * compact reminder to vary them. It does not change character motives.
  */
 
+context.character = context.character || {};
+context.chat = context.chat || {};
+context.character.scenario = context.character.scenario || "";
+
 const HISTORY_DEPTH = 7;
 const MAX_TOKENS = 150;
 const REPEAT_THRESHOLD = 2;
@@ -28,7 +32,7 @@ const CLICHES = [
 function textOf(message) {
   if (!message) return "";
   if (typeof message === "string") return message;
-  return String(message.content ?? message.text ?? "");
+  return String(message.message ?? message.content ?? message.text ?? "");
 }
 
 function recentText() {
