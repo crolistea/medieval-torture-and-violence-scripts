@@ -114,14 +114,14 @@ const allMessages = Array.isArray(context.chat.last_messages)
   : [];
 
 const recentMessages = allMessages
-  .slice(0, CONFIG.HISTORY_DEPTH)
+  .slice(-CONFIG.HISTORY_DEPTH)
   .map(messageText)
   .filter(Boolean);
 
 const latest = messageText(context.chat.last_message);
 
 /*
- * JanitorAI exposes last_messages newest first and may also expose the
+ * JanitorAI exposes last_messages chronologically and may also expose the
  * newest turn separately as last_message. Remove one duplicate newest
  * copy so the latest turn receives only the explicit LATEST_WEIGHT below.
  */
