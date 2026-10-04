@@ -9,9 +9,7 @@ export function CataloguePage() {
     <div className={styles.page}>
       <div className="container">
         <header className={styles.header}>
-          <p>ALL SCRIPTS</p>
-          <h1>Script Catalogue</h1>
-          <span>Browse every available script. Select one to view and copy its code.</span>
+          <h1>ALL SCRIPTS</h1>
         </header>
       </div>
       <Catalogue showAll />
