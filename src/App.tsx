@@ -10,6 +10,7 @@ import { CataloguePage } from './pages/CataloguePage'
 import { HomePage } from './pages/HomePage'
 import { ModulePage } from './pages/ModulePage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { RipperPage } from './pages/RipperPage'
 import { ScraperPage } from './pages/ScraperPage'
 import { useHashPath } from './router/hashRouter'
 import { moduleSlugFromPath, paths } from './router/paths'
@@ -46,6 +47,7 @@ export default function App() {
   if (pathname === paths.home) page = <HomePage />
   else if (pathname === paths.about) page = <AboutPage />
   else if (pathname === paths.scraper) page = <ScraperPage />
+  else if (pathname === paths.ripper) page = <RipperPage />
   else if (pathname === paths.calculator) page = <CalculatorPage />
   else if (pathname === paths.catalogue) page = <CataloguePage />
   else if (activeModule) page = <ModulePage module={activeModule} />
