@@ -1,4 +1,5 @@
 import { modules } from '../../data/modules'
+import { ripper } from '../../data/ripper'
 import { scraper } from '../../data/scraper'
 import { site } from '../../data/site'
 import { Link } from '../../router/Link'
@@ -24,6 +25,11 @@ export function SiteFooter() {
             <li>
               <Link to={paths.scraper} className={styles.link}>
                 {scraper.name}
+              </Link>
+            </li>
+            <li>
+              <Link to={paths.ripper} className={styles.link}>
+                {ripper.name}
               </Link>
             </li>
             <li>

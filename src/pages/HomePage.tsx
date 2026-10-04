@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Catalogue } from '../components/home/Catalogue'
 import { CalculatorTeaser } from '../components/home/CalculatorTeaser'
+import { RipperTeaser } from '../components/home/RipperTeaser'
 import { ScraperTeaser } from '../components/home/ScraperTeaser'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { cx } from '../utils/cx'
@@ -62,6 +63,8 @@ export function HomePage() {
       <Catalogue />
 
       <ScraperTeaser />
+
+      <RipperTeaser />
 
       <CalculatorTeaser />
 
