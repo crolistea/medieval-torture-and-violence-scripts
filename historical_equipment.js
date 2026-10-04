@@ -129,8 +129,7 @@ function messageText(m) {
 function getSignals() {
   const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages : [];
   const latest = messageText(context.chat.last_message);
-  const start = Math.max(0, messages.length - CONFIG.HISTORY_DEPTH);
-  const parts = messages.slice(start).map(messageText).filter(Boolean);
+  const parts = messages.slice(0, CONFIG.HISTORY_DEPTH).map(messageText).filter(Boolean);
   // JanitorAI exposes last_messages newest first, and may also expose the
   // newest turn separately as last_message. Remove one duplicate newest copy.
   if (latest && parts.length && parts[0] === latest) parts.shift();
