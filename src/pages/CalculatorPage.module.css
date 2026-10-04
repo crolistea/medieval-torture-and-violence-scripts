@@ -15,13 +15,13 @@
   border-bottom: 1px solid var(--line-strong);
 }
 .hero::after {
-  content: 'STACK / 01';
+  content: 'VIOLENCE VIOLENCE';
   position: absolute;
   right: 0;
   top: 10px;
   font: 800 clamp(4rem, 10vw, 9rem)/1 var(--calc-font);
   letter-spacing: -.07em;
-  color: rgba(161,0,0,.14);
+  color: rgba(161, 0, 0, 0.083);
 }
 .eyebrow, .blockHead span, .resultHead, .method > span { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .09em; color: var(--accent); }
 .hero h1 {

@@ -71,17 +71,15 @@ export function CalculatorPage() {
   return (
     <div className={cx('container', styles.page)}>
       <header className={styles.hero}>
-        <p className={styles.eyebrow}>SCRIPT STACK / IMPACT ESTIMATOR</p>
-        <h1>Context<br />Pressure</h1>
         <p className={styles.lead}>
-          Estimate token pressure and instruction density before stacking scripts. Context math is measurable; model behavior is an estimate, not a benchmark.
+          See how your scripts may affect token usage, available context, and AI responses before you stack them together.
         </p>
       </header>
 
       <div className={styles.grid}>
         <section className={styles.controls} aria-labelledby="stack-heading">
           <div className={styles.block}>
-            <div className={styles.blockHead}><span>01</span><h2 id="stack-heading">Build your stack</h2></div>
+            <div className={styles.blockHead}><h2 id="stack-heading">What scripts will u use?</h2></div>
             <div className={styles.scripts}>
               {modules.map((module) => {
                 const profile = impactProfileBySlug.get(module.slug)
@@ -103,7 +101,7 @@ export function CalculatorPage() {
           </div>
 
           <div className={styles.block}>
-            <div className={styles.blockHead}><span>02</span><h2>Connection</h2></div>
+            <div className={styles.blockHead}><h2>Connection</h2></div>
             <div className={styles.segmented}>
               {([['jllm','JanitorAI / JLLM'],['paid','JanitorAI paid'],['proxy','Proxy / API']] as const).map(([value,label]) => (
                 <button key={value} type="button" className={connection === value ? styles.active : ''} onClick={() => setConnection(value)}>{label}</button>
@@ -124,7 +122,7 @@ export function CalculatorPage() {
           </div>
 
           <div className={styles.block}>
-            <div className={styles.blockHead}><span>03</span><h2>Generation setup</h2></div>
+            <div className={styles.blockHead}><h2>Generation setup</h2></div>
             <div className={styles.numberGrid}>
               <label className={styles.field}><span>Context window</span><input type="number" min="1024" step="1024" value={contextWindow} onChange={(e) => setContextWindow(Math.max(1024, Number(e.target.value) || 1024))} /><small>tokens</small></label>
               <label className={styles.field}><span>Max response</span><input type="number" min="1" value={responseTokens} onChange={(e) => setResponseTokens(Math.max(1, Number(e.target.value) || 1))} /><small>tokens</small></label>
@@ -158,27 +156,11 @@ export function CalculatorPage() {
             <div><dt>Temp variability</dt><dd>{analysis.tempVariance}</dd></div>
           </dl>
 
-          <div className={styles.explain}>
-            <h2>What this means</h2>
-            {selected.length === 0 ? <p>Select scripts to build a stack. An inactive conditional script adds no model-facing guidance for that turn.</p> : (
-              <>
-                <p><strong>Token cost:</strong> calculated from each script's own injection ceiling, with a weighted expected-use estimate for conditional activation.</p>
-                <p><strong>Behavior:</strong> instruction pressure and overlap are heuristic. Models differ in how reliably they follow competing or subtle guidance.</p>
-                {chosen.filter((x) => x.sharedBudget).length > 1 && <p><strong>Shared budget detected:</strong> the dialogue/intent modules share a 360-token ceiling, so their worst cases are not simply added forever.</p>}
-              </>
-            )}
-          </div>
-
-          <div className={styles.disclaimer}>
-            <strong>ESTIMATE, NOT A BENCHMARK.</strong>
-            <p>Exact JanitorAI prompt assembly, provider truncation and model behavior can vary. Use the context-window value from your actual model/provider for the best estimate.</p>
-          </div>
         </aside>
       </div>
 
       <section className={styles.method}>
-        <span>METHOD / 04</span>
-        <h2>What we can actually know.</h2>
+        <h2>What we rlly know.</h2>
         <div>
           <p><strong>High confidence:</strong> script injection ceilings, shared budgets, selected stack size and percentage of the context window.</p>
           <p><strong>Estimated:</strong> how often conditional scripts activate, instruction pressure and conceptual overlap.</p>
