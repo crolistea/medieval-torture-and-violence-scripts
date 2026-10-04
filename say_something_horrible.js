@@ -42,7 +42,7 @@ function msg(m) {
 }
 const card = [context.character.personality, context.character.description || "", context.character.scenario].join(" ").toLowerCase();
 // JanitorAI exposes last_messages newest-first; take the head, not the tail.
-const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
+const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(-HISTORY_DEPTH) : [];
 const latest = msg(context.chat.last_message) || msg(messages[0]);
 const recent = messages.map(msg).filter(Boolean).join(" ");
 
