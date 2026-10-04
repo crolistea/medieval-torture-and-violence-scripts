@@ -32,9 +32,9 @@ function textOf(m) {
   return String(m.message ?? m.content ?? m.text ?? "");
 }
 
-const messages = Array.isArray(context?.chat?.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
+const messages = Array.isArray(context?.chat?.last_messages) ? context.chat.last_messages.slice(-HISTORY_DEPTH) : [];
 const texts = messages.map(textOf).filter(Boolean);
-const latest = texts[0] || "";
+const latest = textOf(context.chat.last_message) || texts[texts.length - 1] || "";
 const all = texts.join("\n");
 
 let score = RX.injury.test(latest) ? 4 : RX.injury.test(all) ? 2 : 0;
