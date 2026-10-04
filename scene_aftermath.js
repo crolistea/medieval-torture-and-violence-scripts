@@ -26,9 +26,21 @@ const CONFIG = {
   // Approximate maximum context injected by this module.
   MAX_TOKENS: 160,
 
+  // Smaller ceiling used when Bloodloss or No Clean Fights has already added
+  // its own continuity note to this reply, so the three do not pile up.
+  COMPACT_TOKENS: 100,
+
   // How much established evidence is needed before the note is added.
-  MIN_ACTIVATION_SCORE: 3
+  MIN_ACTIVATION_SCORE: 3,
+
+  // Breathlessness and shock pass on their own. If they were last mentioned
+  // this many turns ago or more, they are no longer carried.
+  FADE_AFTER: 6
 };
+
+const MARKER = "[SCENE AFTERMATH]";
+const SIBLING_MARKERS = ["[BLOODLOSS CONTINUITY]", "[NO CLEAN FIGHTS]"];
+const FADING_FAMILIES = ["weakness", "fatigue"];
 
 
 /* ============================================================
@@ -200,6 +212,9 @@ for (const id of Object.keys(SIGNALS)) {
   // Narrated as over, and not mentioned again since: let it go.
   if (clearedAt[id] !== undefined && clearedAt[id] <= at) continue;
 
+  // Short-lived states that nobody has mentioned for a while have passed.
+  if (FADING_FAMILIES.includes(id) && at >= CONFIG.FADE_AFTER) continue;
+
   established.push(id);
   score += family.weight;
 }
@@ -260,7 +275,7 @@ function recoveryLine(short) {
 function buildNote(maxTokens) {
   const labels = established.map(id => SIGNALS[id].label);
 
-  const head = "[SCENE AFTERMATH]";
+  const head = MARKER;
   const rule = "- Carry forward only what the story established. Do not add new injuries, worsen existing ones, or start violence because of this note.";
   const stillTrue = () => "Already established and still true now: " + labels.join(", ") + ". These do not reset between replies.";
 
@@ -288,14 +303,34 @@ function buildNote(maxTokens) {
   return lines.join("\n");
 }
 
-if (score >= CONFIG.MIN_ACTIVATION_SCORE && established.length) {
-  const output = buildNote(CONFIG.MAX_TOKENS);
+/*
+ * Shared context budget. A marker such as [CONTEXT BUDGET: per_script=120] in
+ * the scenario lowers the ceiling, the same way the other modules read it.
+ */
+function getBudget(fallback) {
+  const match = scenarioBefore.match(/\[CONTEXT BUDGET:[^\]]*per_script=(\d+)/i);
+  if (!match) return fallback;
 
+  const external = parseInt(match[1], 10);
+  if (!Number.isFinite(external)) return fallback;
+
+  return Math.min(fallback, Math.max(80, external));
+}
+
+const scenarioBefore = String(context.character.scenario);
+const alreadyAdded = scenarioBefore.includes(MARKER);
+const siblingActive = SIBLING_MARKERS.some(marker => scenarioBefore.includes(marker));
+const budget = getBudget(siblingActive ? CONFIG.COMPACT_TOKENS : CONFIG.MAX_TOKENS);
+
+if (!alreadyAdded && score >= CONFIG.MIN_ACTIVATION_SCORE && established.length) {
+  const output = buildNote(budget);
+
+  // Only ever append. Nothing already in the scenario is touched.
   if (output) context.character.scenario += "\n\n" + output;
 
   if (CONFIG.DEBUG) {
-    console.log("[SCENE AFTERMATH]", { score, established, recovery, tokens: approximateTokens(output) });
+    console.log(MARKER, { score, established, recovery, budget, tokens: approximateTokens(output) });
   }
 } else if (CONFIG.DEBUG) {
-  console.log("[SCENE AFTERMATH] inactive", { score, established });
+  console.log(MARKER + " inactive", { score, established, alreadyAdded });
 }
