@@ -5,6 +5,7 @@ import { SiteHeader } from './components/layout/SiteHeader'
 import { findModule } from './data/modules'
 import { useTheme } from './hooks/useTheme'
 import { AboutPage } from './pages/AboutPage'
+import { CalculatorPage } from './pages/CalculatorPage'
 import { HomePage } from './pages/HomePage'
 import { ModulePage } from './pages/ModulePage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -44,6 +45,7 @@ export default function App() {
   if (pathname === paths.home) page = <HomePage />
   else if (pathname === paths.about) page = <AboutPage />
   else if (pathname === paths.scraper) page = <ScraperPage />
+  else if (pathname === paths.calculator) page = <CalculatorPage />
   else if (activeModule) page = <ModulePage module={activeModule} />
   else page = <NotFoundPage />
 
