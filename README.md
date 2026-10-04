@@ -59,6 +59,31 @@ The script starts with `"use worker";`, guards writable context fields, reads `c
 - `historical_equipment.js` — production module.
 - `tests/test-scenarios.md` — behavioral test matrix.
 - `docs/DESIGN.md` — selection/token architecture and tuning notes.
+- `scene_aftermath.js` — Scene Aftermath module. See `docs/SCENE_AFTERMATH.md`.
+- `src/ripper/` and `tools/ripper/cli.mjs` — the Ripper. See `docs/RIPPER.md`.
+
+## Scene Aftermath
+
+`scene_aftermath.js` keeps consequences the story already established (injuries, pain, exhaustion, ruined clothing, a wrecked room) true in later replies, and lets them recover only as fast as narrated time, treatment and rest allow. It never starts violence, invents an injury or worsens one, and it stays silent in a calm chat. It uses at most about 160 tokens, or 100 when Bloodloss or No Clean Fights already added a note. Install it the same way as the other scripts; the website has a guided page for it.
+
+## The Ripper
+
+A reader that turns script and lorebook data you already have into one clean list of entries: JSON exports, JavaScript lorebooks (read, never run), plain text notes and assembled prompts. It works only on text you give it. It does not log in, fetch anything, or read credentials.
+
+Use it on the website (the Ripper page: paste or choose a file, preview, copy or download clean JSON) or from a terminal:
+
+```sh
+npm run rip -- lorebook.json -o clean.json
+```
+
+## Tests
+
+```sh
+npm test                 # every test file in tests/
+npm run test:aftermath   # Scene Aftermath
+npm run test:ripper      # the Ripper
+npm run test:dialogue    # dialogue modules
+```
 
 ## Website
 
