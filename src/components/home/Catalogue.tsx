@@ -31,9 +31,8 @@ function settle(event: PointerEvent<HTMLLIElement>) {
  * Compact home-page catalogue. "View all" opens the existing script catalogue
  * experience at the first script, where ScriptRail exposes every module.
  */
-export function Catalogue() {
-  const visible = modules.slice(0, HOME_LIMIT)
-  const firstModule = modules[0]
+export function Catalogue({ showAll = false }: { showAll?: boolean }) {
+  const visible = showAll ? modules : modules.slice(0, HOME_LIMIT)
 
   return (
     <section className={styles.catalogue} aria-label="Catalogue">
@@ -60,9 +59,9 @@ export function Catalogue() {
           })}
         </ul>
 
-        {modules.length > HOME_LIMIT && firstModule && (
+        {!showAll && modules.length > HOME_LIMIT && (
           <div className={styles.more}>
-            <Button href={`#${paths.module(firstModule.slug)}`} variant="secondary" size="lg">
+            <Button href={`#${paths.catalogue}`} variant="secondary" size="lg">
               View all
             </Button>
           </div>
