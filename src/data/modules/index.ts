@@ -23,14 +23,14 @@ import { youreCooked } from './youreCooked'
 export const modules: ModuleDefinition[] = [
   historicalEquipment,
   actionVariety,
-  extremeViolence,
+  youreCooked,
   stopSmirking,
   noCleanFights,
   bloodloss,
   saySomethingHorrible,
   maliceAforethought,
   theQuietPart,
-  youreCooked,
+  extremeViolence,
 ]
 
 export function findModule(slug: string): ModuleDefinition | undefined {
