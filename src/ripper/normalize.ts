@@ -53,6 +53,12 @@ function boolean(value: unknown): boolean | null {
   return typeof value === 'boolean' ? value : null
 }
 
+/** Positions and logic modes are a number in some tools and a word in others. Keep either. */
+function positionValue(value: unknown): string | number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  return typeof value === 'string' && value.trim() ? value.trim() : null
+}
+
 /** Accepts a list, or one comma separated string. Drops blanks and repeats. */
 export function toList(value: unknown): string[] {
   const parts = Array.isArray(value) ? value : typeof value === 'string' ? value.split(',') : []
@@ -122,7 +128,7 @@ export function normalizeEntry(raw: Raw, index: number): RipEntry {
 
   const insertion: RipInsertion = {}
   for (const [target, fields, kind] of INSERTION_FIELDS) {
-    const read = kind === 'number' ? number : kind === 'boolean' ? boolean : (value: unknown) => text(value) === null ? null : (value as string | number)
+    const read: (value: unknown) => unknown = kind === 'number' ? number : kind === 'boolean' ? boolean : positionValue
     const value = take(raw, fields, read, used)
     if (value !== null) (insertion as Record<string, unknown>)[target] = value
   }
