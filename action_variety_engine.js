@@ -56,7 +56,7 @@ function budget(fallback){
 }
 const ms=Array.isArray(context.chat.last_messages)?context.chat.last_messages:[];
 const latest=msg(context.chat.last_message);
-const recentParts=ms.slice(0,CONFIG.HISTORY_DEPTH).map(msg).filter(Boolean);
+const recentParts=ms.slice(-CONFIG.HISTORY_DEPTH).map(msg).filter(Boolean);
 if(latest&&recentParts.length&&recentParts[0]===latest)recentParts.shift();
 const recent=recentParts.join(" ");
 const combined=(recent+" "+latest).toLowerCase();
