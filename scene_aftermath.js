@@ -102,7 +102,7 @@ const SIGNALS = {
   },
   surroundings: {
     label: "disturbed surroundings",
-    weight: 1,
+    weight: 2,
     rx: /\b(?:wreck(?:ed|age)|debris|rubble|overturned|knocked over|toppled|broken glass|shards|splinters|blood (?:on|across|pooling on|pooled on) the (?:floor|wall|walls|ground|stairs|table|sheets)|bloodstains?|scorch marks?|in ruins|torn apart|trashed)\b/i
   }
 };
