@@ -4,6 +4,9 @@ import { bloodloss } from './bloodloss'
 import { extremeViolence } from './extremeViolence'
 import { historicalEquipment } from './historicalEquipment'
 import { noCleanFights } from './noCleanFights'
+import { maliceAforethought } from './maliceAforethought'
+import { saySomethingHorrible } from './saySomethingHorrible'
+import { theQuietPart } from './theQuietPart'
 import { stopSmirking } from './stopSmirking'
 
 /*
@@ -23,6 +26,9 @@ export const modules: ModuleDefinition[] = [
   stopSmirking,
   noCleanFights,
   bloodloss,
+  saySomethingHorrible,
+  maliceAforethought,
+  theQuietPart,
 ]
 
 export function findModule(slug: string): ModuleDefinition | undefined {
