@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import { type PointerEvent } from 'react'
 import { catalogueImage } from '../../data/catalogueImages'
 import { modules } from '../../data/modules'
 import { Link } from '../../router/Link'
@@ -7,8 +7,8 @@ import { Button } from '../ui/Button'
 import { ArrowRightIcon } from '../ui/icons'
 import styles from './Catalogue.module.css'
 
-/** How many scripts show before the "View all" button takes over. */
-const FIRST_PAGE = 9
+/** Keep the home page compact; the full catalogue lives on the script pages. */
+const HOME_LIMIT = 6
 
 /*
  * Leans a tile toward the pointer. The position goes straight into CSS
@@ -28,26 +28,16 @@ function settle(event: PointerEvent<HTMLLIElement>) {
 }
 
 /**
- * The script catalogue on the home page: an image, the name and a few words
- * per module, with no heading above it. Images are picked up from
- * src/assets/catalogue/ by slug.
+ * Compact home-page catalogue. "View all" opens the existing script catalogue
+ * experience at the first script, where ScriptRail exposes every module.
  */
-export function Catalogue() {
-  const [showAll, setShowAll] = useState(false)
-  const listRef = useRef<HTMLUListElement>(null)
-
-  const hasMore = modules.length > FIRST_PAGE
-  const visible = showAll ? modules : modules.slice(0, FIRST_PAGE)
-
-  // The button disappears once it is used, so hand focus to the first script it revealed.
-  useEffect(() => {
-    if (showAll) listRef.current?.querySelectorAll('a')[FIRST_PAGE]?.focus()
-  }, [showAll])
+export function Catalogue({ showAll = false }: { showAll?: boolean }) {
+  const visible = showAll ? modules : modules.slice(0, HOME_LIMIT)
 
   return (
     <section className={styles.catalogue} aria-label="Catalogue">
       <div className="container">
-        <ul role="list" className={styles.grid} ref={listRef}>
+        <ul role="list" className={styles.grid}>
           {visible.map((module) => {
             const image = catalogueImage(module.slug)
             return (
@@ -57,7 +47,6 @@ export function Catalogue() {
                 </div>
 
                 <h2 className={styles.name}>
-                  {/* The link's hit area is stretched over the whole item in CSS. */}
                   <Link to={paths.module(module.slug)} className={styles.link}>
                     {module.name}
                     <ArrowRightIcon aria-hidden="true" weight="bold" className={styles.arrow} />
@@ -70,9 +59,9 @@ export function Catalogue() {
           })}
         </ul>
 
-        {hasMore && !showAll && (
+        {!showAll && modules.length > HOME_LIMIT && (
           <div className={styles.more}>
-            <Button variant="secondary" size="lg" onClick={() => setShowAll(true)}>
+            <Button href={`#${paths.catalogue}`} variant="secondary" size="lg">
               View all
             </Button>
           </div>

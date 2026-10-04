@@ -16,7 +16,7 @@
    *
    * The headline resizes itself to keep fitting the hero whatever you pick.
    */
-  --tilt: 50deg;
+  --tilt: 60deg;
   --depth: 4;
 
   /* How much of the screen the bar and hero take together. */

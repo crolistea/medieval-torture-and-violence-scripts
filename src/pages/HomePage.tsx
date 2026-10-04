@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Catalogue } from '../components/home/Catalogue'
+import { CalculatorTeaser } from '../components/home/CalculatorTeaser'
 import { ScraperTeaser } from '../components/home/ScraperTeaser'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { cx } from '../utils/cx'
@@ -61,6 +62,8 @@ export function HomePage() {
       <Catalogue />
 
       <ScraperTeaser />
+
+      <CalculatorTeaser />
 
       <section className={cx('container', styles.promise)} aria-labelledby="home-card">
         <div>
