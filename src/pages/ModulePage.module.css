@@ -7,7 +7,11 @@
   --top-h: 44px;
   --pad: clamp(18px, 2.4vw, 32px);
   /* Fills the screen under the title row, within limits so the panel never gets squat or towering. */
-  --stage-h: clamp(440px, calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 3), 760px);
+  --stage-h: clamp(
+    440px,
+    calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 3),
+    760px
+  );
 
   position: relative;
   isolation: isolate;
@@ -84,15 +88,20 @@
 
 /* A soft pool of red light sits behind the artwork, separate from the image itself. */
 .stage::before {
-  content: '';
+  content: "";
   position: absolute;
   z-index: 0;
   left: 31%;
   top: 50%;
-  width: min(48vw, 620px);
+  width: min(80vw, 1250px);
   aspect-ratio: 1.35;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center, rgb(161 0 0 / 0.24) 0%, rgb(161 0 0 / 0.10) 38%, transparent 72%);
+  background: radial-gradient(
+    ellipse at center,
+    rgb(161 0 0 / 0.24) 0%,
+    rgb(161 0 0 / 0.1) 38%,
+    transparent 72%
+  );
   filter: blur(22px);
   pointer-events: none;
 }
@@ -208,11 +217,15 @@
  */
 @media (max-width: 899px) {
   .page {
-    --stage-h: clamp(320px, calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 4 - 120px), 560px);
+    --stage-h: clamp(
+      320px,
+      calc(100svh - var(--header-h) - var(--top-h) - var(--pad) * 4 - 120px),
+      560px
+    );
   }
 
   .page::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
