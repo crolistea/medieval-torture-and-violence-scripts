@@ -112,7 +112,7 @@ const BODY_FAMILIES = ["wound", "bleeding", "bruising", "pain", "mobility", "wea
 // Things the story can narrate that change how far along recovery is.
 const RECOVERY = {
   care: /\b(?:bandag\w+|stitch(?:es|ed)?|sutur\w+|splint(?:ed)?|dress(?:ed|ing) (?:the|his|her|their|my|your) (?:wound|wounds|cut|cuts|injur(?:y|ies))|cleaned (?:the|his|her|their|my|your) (?:wound|wounds|cut|cuts)|poultice|salve|ointment|treated|tended to|patched (?:up|him|her|them|me|you)|healer|medic|physician|doctor|nurse|infirmary|hospital)\b/i,
-  rest: /\b(?:rest(?:s|ed|ing)?|slept|sleeps?|sleeping|asleep|lay down|lies down|lying down|sat down to recover|caught (?:his|her|their|my|your) breath|catch(?:es)? (?:his|her|their|my|your) breath)\b/i,
+  rest: /\b(?:(?<!the )rest(?:s|ed|ing)?(?! of)|slept|sleeps?|sleeping|asleep|lay down|lies down|lying down|sat down to recover|caught (?:his|her|their|my|your) breath|catch(?:es)? (?:his|her|their|my|your) breath)\b/i,
   hours: /\b(?:(?:an|one|two|three|a few|few|several|some) hours? (?:later|pass|passed|go by|went by)|hours later|later that (?:day|night|evening|afternoon)|by (?:nightfall|evening|dusk|midnight))\b/i,
   days: /\b(?:(?:the )?next (?:morning|day)|the following (?:morning|day)|by (?:morning|dawn)|(?:a|one|two|three|a few|few|several|some) days? (?:later|pass|passed|go by|went by)|days later|overnight)\b/i,
   long: /\b(?:(?:a|one|two|three|a few|few|several|some|many) (?:weeks?|months?|years?) (?:later|pass|passed|go by|went by)|(?:weeks|months|years) later)\b/i

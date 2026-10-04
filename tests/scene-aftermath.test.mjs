@@ -211,3 +211,8 @@ test("it runs next to the other continuity and violence modules", () => {
   assert.ok(out.startsWith("Card text."));
   assert.match(out, MARKER);
 });
+
+test("\"the rest of\" is not read as resting", () => {
+  const out = note(run(["He limps after the rest of the group, the wound in his side still bleeding."]));
+  assert.match(out, /no rest or time skip has been narrated/);
+});
