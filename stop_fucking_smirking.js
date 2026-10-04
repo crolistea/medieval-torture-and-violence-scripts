@@ -38,8 +38,8 @@ function textOf(message) {
 function recentText() {
   const messages = context?.chat?.last_messages;
   if (!Array.isArray(messages)) return "";
-  // JanitorAI exposes newest messages first.
-  return messages.slice(0, HISTORY_DEPTH).map(textOf).filter(Boolean).join("\n");
+  // JanitorAI exposes last_messages chronologically; take the recent tail.
+  return messages.slice(-HISTORY_DEPTH).map(textOf).filter(Boolean).join("\n");
 }
 
 function countMatches(text, re) {
