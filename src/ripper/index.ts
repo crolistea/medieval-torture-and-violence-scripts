@@ -1,6 +1,7 @@
 import { readJavascript, readLooseLiteral } from './javascript.ts'
 import { findInJson, parseJson } from './json.ts'
 import { looksLikeEntry, normalizeAll } from './normalize.ts'
+import { readText } from './text.ts'
 import { FORMAT_LABELS, RipError, type RipEntry, type RipFormat, type RipResult } from './types.ts'
 
 /*
@@ -43,8 +44,26 @@ export function rip(input: string): RipResult {
   const text = unwrap(input)
   const warnings: string[] = []
 
-  if (text[0] === '{' || text[0] === '[') return ripJson(text, warnings)
-  return ripJavascript(text, {}, warnings)
+  if (looksLikeJson(text)) return ripJson(text, warnings)
+  if (LOOKS_LIKE_JAVASCRIPT.test(text)) return ripJavascript(text, {}, warnings)
+  return ripText(text, warnings)
+}
+
+const LOOKS_LIKE_JAVASCRIPT =
+  /(?:^|\n)\s*(?:["']use (?:worker|strict)["']|(?:export\s+)?(?:const|let|var)\s+[\w$]+\s*=|function\s+[\w$]+\s*\(|module\.exports\s*=|export\s+default\b|context\.[\w.]+\s*\+?=)/
+
+/** Starts like JSON, and is not just a [Heading] line at the top of some notes. */
+function looksLikeJson(text: string): boolean {
+  if (text[0] === '{') return true
+  return text[0] === '[' && !/^\[[^\][{}"',]*[A-Za-z][^\][{}"',]*\]\s*\n/.test(text)
+}
+
+function ripText(text: string, warnings: string[]): RipResult {
+  const read = readText(text)
+  if (!read.structured) {
+    warnings.push('No headings, Name: or Keys: lines, or --- separators were found, so each paragraph became one entry with no name and no keys.')
+  }
+  return finish('plain-text', {}, normalizeAll(read.entries, warnings), warnings)
 }
 
 function ripJson(text: string, warnings: string[]): RipResult {
