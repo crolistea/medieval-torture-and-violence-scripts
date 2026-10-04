@@ -74,6 +74,7 @@
 }
 
 .stage {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   align-items: center;
@@ -81,13 +82,26 @@
   min-height: 0;
 }
 
-/* The image runs a little way under the panel, so the panel reads as standing in front. */
+/* A soft pool of red light sits behind the artwork, separate from the image itself. */
+.stage::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 31%;
+  top: 50%;
+  width: min(48vw, 620px);
+  aspect-ratio: 1.35;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgb(161 0 0 / 0.24) 0%, rgb(161 0 0 / 0.10) 38%, transparent 72%);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+/* The image runs a little way under the panel. The panel itself stays above it. */
 .shot {
   position: relative;
   z-index: 1;
   margin-right: -9%;
-  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 24%, transparent))
-    drop-shadow(0 0 52px color-mix(in srgb, var(--accent) 12%, transparent));
 }
 
 /* A script with no image keeps an outlined slot in its place. */
@@ -100,6 +114,7 @@
 
 .panel {
   position: relative;
+  z-index: 2;
   display: grid;
   /* The explicit column stops a long file name from widening the panel. */
   grid-template-columns: minmax(0, 1fr);
@@ -216,6 +231,10 @@
   .stage {
     display: block;
     height: var(--stage-h);
+  }
+
+  .stage::before {
+    display: none;
   }
 
   .shot {
