@@ -1,4 +1,3 @@
-
 "use worker";
 
 /*
@@ -115,7 +114,7 @@ const allMessages = Array.isArray(context.chat.last_messages)
   : [];
 
 const recentMessages = allMessages
-  .slice(Math.max(0, allMessages.length - CONFIG.HISTORY_DEPTH))
+  .slice(0, CONFIG.HISTORY_DEPTH)
   .map(messageText)
   .filter(Boolean);
 
