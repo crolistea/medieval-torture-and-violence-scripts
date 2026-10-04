@@ -1,5 +1,5 @@
 /** Site-wide names and links. Rename the project here. */
-const repoUrl = 'https://github.com/sawyer100/medieval-shit-and-violence-script'
+const repoUrl = 'https://github.com/sawyer100/medieval-torture-and-violence-scripts'
 
 export const site = {
   name: 'VIOLENCE',
