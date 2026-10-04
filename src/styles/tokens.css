@@ -24,8 +24,8 @@
   --ink: #000000;
 
   /* Type */
-  /* The headline face. Swap the first name for 'Metal Mania' or 'Isometra' to go back to an earlier one. */
-  --font-display: 'Rubik Glitch', 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
+  /* Main display face used by the home hero and scraper headings. */
+  --font-display: 'Isometra', 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
   --font-sans: 'Archivo Variable', 'Helvetica Neue', Arial, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
