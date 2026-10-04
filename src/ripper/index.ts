@@ -1,7 +1,7 @@
 import { readJavascript, readLooseLiteral } from './javascript.ts'
 import { findInJson, parseJson } from './json.ts'
 import { looksLikeEntry, normalizeAll } from './normalize.ts'
-import { readText } from './text.ts'
+import { looksLikePrompt, readPrompt, readText } from './text.ts'
 import { FORMAT_LABELS, RipError, type RipEntry, type RipFormat, type RipResult } from './types.ts'
 
 /*
@@ -46,6 +46,7 @@ export function rip(input: string): RipResult {
 
   if (looksLikeJson(text)) return ripJson(text, warnings)
   if (LOOKS_LIKE_JAVASCRIPT.test(text)) return ripJavascript(text, {}, warnings)
+  if (looksLikePrompt(text)) return ripPrompt(text, 'prompt-text', {}, warnings)
   return ripText(text, warnings)
 }
 
@@ -56,6 +57,19 @@ const LOOKS_LIKE_JAVASCRIPT =
 function looksLikeJson(text: string): boolean {
   if (text[0] === '{') return true
   return text[0] === '[' && !/^\[[^\][{}"',]*[A-Za-z][^\][{}"',]*\]\s*\n/.test(text)
+}
+
+/*
+ * An assembled prompt mixes the card, the persona, instructions and any
+ * lorebook text. The tags say which section is which; nothing says which
+ * loose paragraph is lore, so those are passed through unnamed and unsorted.
+ */
+function ripPrompt(text: string, format: RipFormat, source: Record<string, unknown>, warnings: string[]): RipResult {
+  const read = readPrompt(text)
+  if (read.loose) {
+    warnings.push(`${read.loose} block${read.loose === 1 ? '' : 's'} of text sat outside any tag. They were split at blank lines and left unnamed, because the prompt does not say what they are.`)
+  }
+  return finish(format, source, normalizeAll(read.entries, warnings), warnings)
 }
 
 function ripText(text: string, warnings: string[]): RipResult {
@@ -79,6 +93,7 @@ function ripJson(text: string, warnings: string[]): RipResult {
   }
 
   const found = findInJson(value)
+  if (found.prompt !== undefined) return ripPrompt(found.prompt, found.format, found.source, warnings)
   if (found.javascript !== undefined) return ripJavascript(found.javascript, found.source, warnings, 'script-record-json')
   return finish(found.format, found.source, normalizeAll(found.entries, warnings), warnings)
 }
