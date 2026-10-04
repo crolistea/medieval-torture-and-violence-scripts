@@ -31,9 +31,9 @@ function textOf(m) {
   return String(m.message ?? m.content ?? m.text ?? "");
 }
 
-const messages = Array.isArray(context?.chat?.last_messages) ? context.chat.last_messages.slice(-HISTORY_DEPTH) : [];
+const messages = Array.isArray(context?.chat?.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
 const recent = messages.map(textOf).filter(Boolean);
-const latest = textOf(context.chat.last_message) || recent[recent.length - 1] || "";
+const latest = textOf(context.chat.last_message) || recent[0] || "";
 const history = recent.join("\n");
 const characterText = [
   context.character.name,
