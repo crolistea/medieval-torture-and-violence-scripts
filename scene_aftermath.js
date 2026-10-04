@@ -97,6 +97,38 @@ const SIGNALS = {
 
 const BODY_FAMILIES = ["wound", "bleeding", "bruising", "pain", "mobility", "weakness", "fatigue"];
 
+// Things the story can narrate that change how far along recovery is.
+const RECOVERY = {
+  care: /\b(?:bandag\w+|stitch(?:es|ed)?|sutur\w+|splint(?:ed)?|dress(?:ed|ing) (?:the|his|her|their|my|your) (?:wound|wounds|cut|cuts|injur(?:y|ies))|cleaned (?:the|his|her|their|my|your) (?:wound|wounds|cut|cuts)|poultice|salve|ointment|treated|tended to|patched (?:up|him|her|them|me|you)|healer|medic|physician|doctor|nurse|infirmary|hospital)\b/i,
+  rest: /\b(?:rest(?:s|ed|ing)?|slept|sleeps?|sleeping|asleep|lay down|lies down|lying down|sat down to recover|caught (?:his|her|their|my|your) breath|catch(?:es)? (?:his|her|their|my|your) breath)\b/i,
+  hours: /\b(?:(?:an|one|two|three|a few|few|several|some) hours? (?:later|pass|passed|go by|went by)|hours later|later that (?:day|night|evening|afternoon)|by (?:nightfall|evening|dusk|midnight))\b/i,
+  days: /\b(?:(?:the )?next (?:morning|day)|the following (?:morning|day)|by (?:morning|dawn)|(?:a|one|two|three|a few|few|several|some) days? (?:later|pass|passed|go by|went by)|days later|overnight)\b/i,
+  long: /\b(?:(?:a|one|two|three|a few|few|several|some|many) (?:weeks?|months?|years?) (?:later|pass|passed|go by|went by)|(?:weeks|months|years) later)\b/i
+};
+
+// How serious the story said it was. Only ever read from the text.
+const SEVERITY = {
+  serious: /\b(?:serious(?:ly)?|severe(?:ly)?|grave(?:ly)?|badly|deep (?:wound|cut|gash)|stabbed|shot|impaled|broken (?:rib|ribs|arm|leg|wrist|ankle|nose)|fractur\w+|unconscious|passed out|collaps\w+|can(?:not|'t| not) (?:stand|walk|move)|can barely (?:stand|walk|move)|blood loss|lost (?:a lot of|so much|too much) blood)\b/i,
+  minor: /\b(?:minor|shallow|small (?:cut|wound|bruise|scratch)|scratch(?:es|ed)?|scrape[sd]?|graz(?:e|ed|es)|just a (?:cut|bruise|scratch|scrape)|nothing serious|superficial)\b/i
+};
+
+// Explicit narration that a consequence is over. Each one clears a group of
+// families, but only when it is newer than the last mention of that family.
+const RESOLVED = {
+  body: {
+    families: BODY_FAMILIES,
+    rx: /\b(?:fully (?:healed|recovered)|completely (?:healed|recovered)|healed completely|(?:wound|wounds|injury|injuries|cut|cuts|bruise|bruises) (?:is|are|has|have) (?:fully |completely |long )?(?:healed|gone|closed|faded)|magically healed|healing (?:spell|potion|magic) (?:closes|closed|mends|mended|restores|restored)|no longer (?:in pain|bleeding|limping|hurts?))\b/i
+  },
+  clothing: {
+    families: ["clothing", "grime"],
+    rx: /\b(?:chang(?:es|ed) (?:into|his|her|their|my|your) (?:\w+ )?(?:clothes|clothing|shirt|outfit)|fresh (?:clothes|clothing|shirt|tunic)|clean (?:clothes|clothing|shirt|tunic)|bath(?:es|ed)|washed (?:up|off|himself|herself|themselves|myself|yourself)|took a (?:bath|shower)|scrubbed (?:clean|off))\b/i
+  },
+  place: {
+    families: ["objects", "surroundings"],
+    rx: /\b(?:repair(?:s|ed)|mended|replaced the|swept up|cleaned up the|tid(?:y|ied|ies) (?:up )?the|put (?:the|everything) back|room is (?:clean|tidy|spotless) again|(?:left|leave|leaves|leaving) the (?:room|house|building|tavern|alley|camp|battlefield|scene)|(?:arriv(?:e|es|ed)|walk(?:s|ed)?) (?:at|into|in) (?:a|an|the) (?:new|different|other))\b/i
+  }
+};
+
 // Phrases that say the opposite of a signal. They are blanked out before
 // matching so "nobody was injured" cannot establish an injury.
 const NEGATIONS = /\b(?:un(?:harmed|hurt|injured|scathed|wounded)|(?:not|never|isn't|aren't|wasn't|weren't|no one (?:is|was)|nobody (?:is|was)) (?:\w+ )?(?:hurt|injured|wounded|bleeding|bruised|in pain|tired|exhausted|limping)|no (?:injur(?:y|ies)|wounds?|blood|bruises?|pain|damage)|without (?:a|any) (?:scratch|wound|injury|bruise)|pain(?:less|-free)|good as new)\b/gi;
@@ -150,6 +182,13 @@ function newestIndex(rx) {
    WHAT HAS BEEN ESTABLISHED
    ============================================================ */
 
+const clearedAt = {};
+for (const group of Object.values(RESOLVED)) {
+  const at = newestIndex(group.rx);
+  if (at === -1) continue;
+  for (const id of group.families) clearedAt[id] = at;
+}
+
 const established = [];
 let score = 0;
 
@@ -157,6 +196,10 @@ for (const id of Object.keys(SIGNALS)) {
   const family = SIGNALS[id];
   const at = newestIndex(family.rx);
   if (at === -1) continue;
+
+  // Narrated as over, and not mentioned again since: let it go.
+  if (clearedAt[id] !== undefined && clearedAt[id] <= at) continue;
+
   established.push(id);
   score += family.weight;
 }
@@ -165,31 +208,93 @@ const bodyEstablished = established.some(id => BODY_FAMILIES.includes(id));
 
 
 /* ============================================================
-   OUTPUT
+   RECOVERY
+   How far along things are, judged only from what was narrated:
+   elapsed time, treatment, rest and stated severity.
    ============================================================ */
 
+const windowText = turns.join("\n");
+
+const recovery = {
+  care: RECOVERY.care.test(windowText),
+  rest: RECOVERY.rest.test(windowText),
+  elapsed: RECOVERY.long.test(windowText) ? "long" : RECOVERY.days.test(windowText) ? "days" : RECOVERY.hours.test(windowText) ? "hours" : "none",
+  severity: SEVERITY.serious.test(windowText) ? "serious" : SEVERITY.minor.test(windowText) ? "minor" : "unstated"
+};
+
+function recoveryLine(short) {
+  let stage;
+
+  if (recovery.elapsed === "long") {
+    stage = "a long time has passed, so minor marks and tiredness are gone";
+  } else if (recovery.elapsed === "days") {
+    stage = "a day or more has passed, so exhaustion has eased while cuts and bruises are healing but visible";
+  } else if (recovery.elapsed === "hours" || recovery.rest) {
+    stage = "some rest or a few hours have passed, so breath and shaking settle first while wounds and soreness remain";
+  } else {
+    stage = "no rest or time skip has been narrated, so everything is still fresh";
+  }
+
+  if (recovery.care) stage += "; treated injuries are dressed and steadier, not gone";
+
+  if (recovery.severity === "serious") {
+    stage += ". It was established as serious: recovery is slow.";
+  } else if (recovery.severity === "minor") {
+    stage += ". It was established as minor: it can fade quickly.";
+  } else {
+    stage += ".";
+  }
+
+  if (short) return "- Recovery: " + stage;
+  return "- Recovery: " + stage + " More healing needs time, treatment, rest or explicit narration.";
+}
+
+
+/* ============================================================
+   OUTPUT
+   The header, the list of what was established and the "do not
+   invent" rule always go in. The other lines are added in order
+   of importance while they still fit the budget.
+   ============================================================ */
+
+function buildNote(maxTokens) {
+  const labels = established.map(id => SIGNALS[id].label);
+
+  const head = "[SCENE AFTERMATH]";
+  const rule = "- Carry forward only what the story established. Do not add new injuries, worsen existing ones, or start violence because of this note.";
+  const stillTrue = () => "Already established and still true now: " + labels.join(", ") + ". These do not reset between replies.";
+
+  // A very small budget keeps the most important families and drops the rest.
+  while (labels.length > 1 && approximateTokens([head, stillTrue(), rule].join("\n")) > maxTokens) {
+    labels.pop();
+  }
+
+  const lines = [head, stillTrue(), rule];
+  if (approximateTokens(lines.join("\n")) > maxTokens) return "";
+
+  // Each slot lists its wordings from longest to shortest; the first one that fits is used.
+  const optional = bodyEstablished
+    ? [
+        ["- {{char}}'s personality decides how it shows (hidden, shrugged off, complained about, raged through), not whether it exists."],
+        [recoveryLine(false), recoveryLine(true)]
+      ]
+    : [["- Damage, mess and dirt stay as they were left until someone in the story cleans, repairs or leaves them."]];
+
+  for (const wordings of optional) {
+    const line = wordings.find(text => approximateTokens(lines.concat(text).join("\n")) <= maxTokens);
+    if (line) lines.splice(lines.length - 1, 0, line);
+  }
+
+  return lines.join("\n");
+}
+
 if (score >= CONFIG.MIN_ACTIVATION_SCORE && established.length) {
-  const carried = established.map(id => SIGNALS[id].label).join(", ");
+  const output = buildNote(CONFIG.MAX_TOKENS);
 
-  const lines = [
-    "[SCENE AFTERMATH]",
-    "The story has already established consequences that are still true now: " + carried + ".",
-    "- Keep them present in the next reply. They do not reset between messages.",
-    "- Carry forward only what the story established. Do not add new injuries, worsen existing ones, or start violence because of this note."
-  ];
-
-  if (bodyEstablished) {
-    lines.push("- {{char}}'s personality decides how it shows (hidden, shrugged off, complained about, raged through), not whether it exists.");
-  }
-
-  const output = lines.join("\n");
-
-  if (approximateTokens(output) <= CONFIG.MAX_TOKENS) {
-    context.character.scenario += "\n\n" + output;
-  }
+  if (output) context.character.scenario += "\n\n" + output;
 
   if (CONFIG.DEBUG) {
-    console.log("[SCENE AFTERMATH]", { score, established, tokens: approximateTokens(output) });
+    console.log("[SCENE AFTERMATH]", { score, established, recovery, tokens: approximateTokens(output) });
   }
 } else if (CONFIG.DEBUG) {
   console.log("[SCENE AFTERMATH] inactive", { score, established });
