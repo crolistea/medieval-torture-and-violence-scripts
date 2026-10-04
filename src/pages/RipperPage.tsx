@@ -1,10 +1,11 @@
-import { useId, useRef, useState, type DragEvent } from 'react'
+import { useId, useMemo, useRef, useState, type DragEvent } from 'react'
 import { Button } from '../components/ui/Button'
-import { ArrowUpRightIcon, UploadSimpleIcon, WarningIcon } from '../components/ui/icons'
+import { CopyButton } from '../components/ui/CopyButton'
+import { ArrowUpRightIcon, DownloadSimpleIcon, UploadSimpleIcon, WarningIcon } from '../components/ui/icons'
 import { RichText } from '../components/ui/RichText'
 import { ripper } from '../data/ripper'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { rip, RipError, type RipEntry, type RipResult } from '../ripper/index.ts'
+import { rip, RipError, toCleanJson, type RipEntry, type RipResult } from '../ripper/index.ts'
 import { cx } from '../utils/cx'
 import { formatSize } from '../utils/scriptSource'
 import styles from './RipperPage.module.css'
@@ -23,6 +24,28 @@ function run(input: string): Outcome {
     const detail = error instanceof Error ? error.message : String(error)
     return { ok: false, error: new RipError('no-entries', `The ripper failed while reading this: ${detail}`) }
   }
+}
+
+/** "My Book.json" -> "my-book.ripped.json". */
+function outputName(fileName: string | null): string {
+  const base = (fileName ?? 'lorebook')
+    .replace(/\.[^.]+$/, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return `${base || 'lorebook'}.ripped.json`
+}
+
+/** Hands the text to the browser as a file to save. Nothing leaves the device. */
+function download(text: string, name: string) {
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = name
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
 }
 
 /** The facts about one entry that are worth a glance, in the order they are shown. */
@@ -135,6 +158,7 @@ export function RipperPage() {
 
   const result = outcome?.ok ? outcome.result : null
   const error = outcome && !outcome.ok ? outcome.error : null
+  const cleanJson = useMemo(() => (result ? toCleanJson(result) : ''), [result])
 
   return (
     <div className={cx('container', styles.page)}>
@@ -250,6 +274,14 @@ export function RipperPage() {
                   {result.entries.length} {result.entries.length === 1 ? 'entry' : 'entries'}
                 </p>
                 <p className={styles.format}>Read as: {result.formatLabel}</p>
+              </div>
+
+              <div className={styles.exports}>
+                <CopyButton value={cleanJson} label="Copy clean JSON" subject="Clean JSON" size="large" />
+                <Button variant="secondary" size="lg" onClick={() => download(cleanJson, outputName(fileName))}>
+                  <DownloadSimpleIcon aria-hidden="true" weight="bold" />
+                  Download .json
+                </Button>
               </div>
 
               {result.warnings.length > 0 && (

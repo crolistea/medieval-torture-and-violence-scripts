@@ -217,6 +217,13 @@
   color: var(--text-dim);
 }
 
+.exports {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+}
+
 .warnings {
   display: grid;
   gap: 8px;
