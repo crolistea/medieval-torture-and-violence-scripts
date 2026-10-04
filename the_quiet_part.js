@@ -1,54 +1,68 @@
 "use worker";
 
-/*
- * The Quiet Part v0.1
- * Silence, withholding, and emotional restraint for fictional dialogue.
- * Prevents every question from automatically producing an explanatory speech.
- */
-
+/* The Quiet Part v0.2 — silence, withholding and emotional restraint. */
 context.character = context.character || {};
 context.chat = context.chat || {};
 context.character.scenario = context.character.scenario || "";
 context.character.personality = context.character.personality || "";
 
 const HISTORY_DEPTH = 6;
-const MAX_TOKENS = 170;
-const MIN_SCORE = 4;
+const MAX_TOKENS = 125;
+const MIN_SCORE = 7;
 const DEBUG = false;
+const SHARED_BUDGET = 360;
+const BUDGET_RE = /\n?\[DIALOGUE MODULE BUDGET: (\d+)\/360\]/;
+
+function words(text) {
+  return new Set((text.toLowerCase().match(/[a-z]+(?:-[a-z]+)?/g) || []));
+}
+function countWords(text, terms) {
+  const set = words(text);
+  return terms.reduce((n, term) => n + (set.has(term) ? 1 : 0), 0);
+}
+function countPhrases(text, phrases) {
+  const lower = text.toLowerCase();
+  return phrases.reduce((n, phrase) => n + (lower.includes(phrase) ? 1 : 0), 0);
+}
+function appendGuidance(out) {
+  const tokens = Math.ceil(out.length / 4);
+  if (tokens > MAX_TOKENS) return false;
+  const match = context.character.scenario.match(BUDGET_RE);
+  const used = match ? Number(match[1]) : 0;
+  if (used + tokens > SHARED_BUDGET) return false;
+  context.character.scenario = context.character.scenario.replace(BUDGET_RE, "");
+  context.character.scenario += "\n\n" + out + "\n[DIALOGUE MODULE BUDGET: " + (used + tokens) + "/" + SHARED_BUDGET + "]";
+  return true;
+}
 
 function msg(m) {
   if (!m) return "";
   if (typeof m === "string") return m.toLowerCase();
   return String(m.message ?? m.content ?? m.text ?? "").toLowerCase();
 }
-function hits(text, terms) { return terms.reduce((n,t)=>n+(text.includes(t)?1:0),0); }
-
-const card = [
-  context.character.personality || "",
-  context.character.description || "",
-  context.character.scenario || ""
-].join(" ").toLowerCase();
-
-const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(-HISTORY_DEPTH) : [];
+const card = [context.character.personality, context.character.description || "", context.character.scenario].join(" ").toLowerCase();
+const messages = Array.isArray(context.chat.last_messages) ? context.chat.last_messages.slice(0, HISTORY_DEPTH) : [];
 const latest = msg(context.chat.last_message) || msg(messages[0]);
 const recent = messages.map(msg).filter(Boolean).join(" ");
 
-const reserved = ["quiet","silent","stoic","guarded","secretive","cold","controlled","calculating","reserved","withdrawn","deceptive","manipulative","emotionless","aloof","traumatized","shy"];
-const pressure = ["why","tell me","answer me","explain","confess","admit","what are you thinking","what do you want","secret","accuse","accusation","confront"];
-const talkative = ["talkative","chatty","open book","honest to a fault","overshar"];
+const reserved = ["quiet","silent","stoic","guarded","secretive","controlled","calculating","reserved","withdrawn","deceptive","aloof"];
+const strongPressure = ["confess","admit","explain","answer"];
+const pressurePhrases = ["answer me","tell me the truth","why did you","what are you hiding","what were you thinking","tell me exactly","don't lie","do not lie","you owe me an explanation"];
+const talkative = ["talkative","chatty","outgoing","candid","forthcoming"];
 
-let score = hits(card,reserved)*3 + hits(latest,pressure)*2 + hits(recent,pressure);
-score -= hits(card,talkative)*3;
+const reserveScore = countWords(card, reserved) * 3;
+const pressureScore = countWords(latest, strongPressure) * 2 + countPhrases(latest, pressurePhrases) * 3 + countPhrases(recent, pressurePhrases);
+let score = reserveScore + pressureScore - countWords(card, talkative) * 4;
 
-if (score >= MIN_SCORE) {
+if (reserveScore >= 3 && pressureScore >= 3 && score >= MIN_SCORE) {
   const out = [
     "[THE QUIET PART]",
-    "Silence and withholding are valid character actions. Do not assume every direct question deserves an immediate, complete, truthful explanation.",
-    "- When consistent with the established personality and situation, the character may pause, refuse to answer, give an incomplete answer, change the subject, lie, answer mundanely, observe instead of speaking, leave, or let another character misunderstand.",
-    "- Private motives do not need to be exposed in narration or dialogue merely because another character asks about them.",
-    "- Distinguish deliberate silence from shock, anger, fear, emotional shutdown, calculation, contempt, uncertainty, or simple lack of anything useful to say.",
-    "- Do not force mysterious silence onto naturally open or talkative characters, and do not use silence to stall every scene. Characterization and current context remain authoritative."
+    "For this guarded character under meaningful pressure, silence and withholding are valid actions; a question need not produce a complete truthful explanation.",
+    "- When fitting, they may pause, refuse, evade, lie, answer incompletely or mundanely, observe, leave, or permit a misunderstanding.",
+    "- Private motives need not be exposed merely because another character asks.",
+    "- Let silence reflect the actual state: anger, fear, shock, calculation, contempt, uncertainty or withdrawal.",
+    "- Do not force mystery onto open characters or use silence to stall every scene."
   ].join("\n");
-  if (Math.ceil(out.length/4) <= MAX_TOKENS) context.character.scenario += "\n\n" + out;
-  if (DEBUG) console.log("[THE QUIET PART]", {score});
+  appendGuidance(out);
+  if (DEBUG) console.log("[THE QUIET PART]", { score });
 }
