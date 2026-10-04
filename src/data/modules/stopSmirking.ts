@@ -11,7 +11,7 @@ export const stopSmirking: ModuleDefinition = {
   name,
   theme: 'blood',
   tagline: 'Detects overused roleplay mannerisms in recent prose and nudges the next reply toward fresher reactions without changing the character.',
-  blurb: 'Smirked. Chuckled darkly. Leaned closer. Enough.',
+  blurb: 'Make fights and mannerisms NOT CLICHE.',
   script,
   settings: [
     { key: 'HISTORY_DEPTH', value: readSetting(script, 'HISTORY_DEPTH'), meaning: 'How many recent messages are checked for repeated prose beats.' },
